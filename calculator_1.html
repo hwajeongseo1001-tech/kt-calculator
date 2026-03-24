@@ -15,39 +15,46 @@
 }
 
 :root {
-  --bg-base: #f0f2f5;
+  /* KTM&S Brand Palette */
+  --bg-base: #f6f6f6;
   --bg-card: #ffffff;
-  --bg-input: #f4f5f7;
-  --bg-hero: #2d3436;
+  --bg-input: #f9f9f9;
+  --bg-hero: #181818;
 
-  --border-default: rgba(0,0,0,0.06);
-  --border-hover: rgba(0,0,0,0.12);
-  --border-focus: rgba(74,124,255,0.45);
+  --border-default: #e0e0e0;
+  --border-hover: #b9b9b9;
+  --border-focus: rgba(5,164,188,0.45);
 
-  --text-primary: #2d3436;
-  --text-secondary: #636e72;
-  --text-muted: #b2bec3;
+  --text-primary: #221e1f;
+  --text-secondary: #4c4c4e;
+  --text-muted: #b9b9b9;
   --text-hero: #ffffff;
-  --text-hero-muted: rgba(255,255,255,0.55);
+  --text-hero-muted: rgba(255,255,255,0.5);
 
-  --accent-blue: #4a7cff;
-  --accent-blue-dim: rgba(74,124,255,0.08);
-  --accent-green: #2ecc71;
-  --accent-green-dim: rgba(46,204,113,0.08);
-  --accent-coral: #e74c6f;
-  --accent-coral-dim: rgba(231,76,111,0.08);
+  /* KT Red = primary CTA */
+  --kt-red: #EC1B23;
+  --kt-red-dim: rgba(236,27,35,0.08);
+  /* Teal = accent/highlight */
+  --accent-teal: #05A4BC;
+  --accent-teal-dim: rgba(5,164,188,0.08);
+  /* Mint = positive/discount */
+  --accent-mint: #00A9A7;
+  --accent-mint-dim: rgba(0,169,167,0.08);
+  /* Warm gray for secondary values */
+  --accent-gray: #636363;
 
-  --color-discount: #2ecc71;
-  --color-highlight: #4a7cff;
-  --color-total: #4a7cff;
-  --color-phone: #e74c6f;
-  --color-plan: #2ecc71;
+  /* Semantic colors */
+  --color-discount: #00A9A7;
+  --color-highlight: #05A4BC;
+  --color-total: #221e1f;
+  --color-phone: #EC1B23;
+  --color-plan: #05A4BC;
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 16px;
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.1);
   --transition-fast: 150ms cubic-bezier(0.16,1,0.3,1);
   --transition-normal: 300ms cubic-bezier(0.16,1,0.3,1);
 }
@@ -66,41 +73,63 @@ body {
   overflow-x: hidden;
 }
 
-/* === HERO HEADER === */
+/* === NAV BAR (Figma Smart Quote style) === */
 .hero-header {
-  background: var(--bg-base);
-  padding: 32px 24px 16px;
+  background: #ffffff;
+  padding: 0;
+  border-bottom: 1px solid var(--border-default);
 }
 
 .hero-header::before,
 .hero-header::after { display: none; }
 
-.hero-inner {
-  max-width: 1200px;
+.hero-top {
+  max-width: 1280px;
   margin: 0 auto;
-  text-align: center;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.hero-header h1 {
-  font-size: 1.6rem;
+.hero-logo svg { width: 120px; height: auto; }
+
+.hero-logo {
+  font-size: 18px;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.hero-logo span { color: var(--kt-red); }
+
+.hero-nav-divider {
+  width: 1px;
+  height: 24px;
+  background: #ccc;
+}
+
+.hero-nav-title {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-.hero-header p {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 400;
-}
+.hero-inner { display: none; }
+.hero-header h1 { display: none; }
+.hero-header h1::after { display: none; }
+.hero-header p { display: none; }
+.hero-badge { display: none; }
+
+/* === PAGE TITLE (below nav, inside main) === */
+.page-title { display: none; }
 
 /* === MAIN LAYOUT === */
 .main-wrap {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 60px;
+  padding: 48px 16px 60px;
 }
 
 .two-col {
@@ -146,9 +175,9 @@ body {
 }
 
 .card-icon svg { width: 18px; height: 18px; }
-.card-icon.blue { background: var(--accent-blue-dim); color: var(--accent-blue); }
-.card-icon.green { background: var(--accent-green-dim); color: var(--accent-green); }
-.card-icon.coral { background: var(--accent-coral-dim); color: var(--accent-coral); }
+.card-icon.blue { background: var(--accent-teal-dim); color: var(--accent-teal); }
+.card-icon.green { background: var(--accent-mint-dim); color: var(--accent-mint); }
+.card-icon.coral { background: var(--kt-red-dim); color: var(--kt-red); }
 
 .card-title {
   font-size: 14px;
@@ -205,7 +234,7 @@ body {
 }
 
 .custom-select select:hover { border-color: var(--border-hover); background: #fff; }
-.custom-select select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(74,124,255,0.12); }
+.custom-select select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(5,164,188,0.12); }
 
 .custom-select::after {
   content: '';
@@ -237,7 +266,7 @@ body {
 }
 
 .num-input:hover { border-color: var(--border-hover); }
-.num-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(74,124,255,0.12); }
+.num-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(5,164,188,0.12); }
 .num-input::placeholder { color: var(--text-muted); }
 .num-input::-webkit-outer-spin-button,
 .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -247,74 +276,89 @@ body {
 
 /* === SUMMARY TOTAL CARD === */
 .summary-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(74,124,255,0.15);
+  background: linear-gradient(135deg, #222 0%, #333 100%);
+  border: none;
   border-radius: var(--radius-lg);
-  padding: 28px 24px;
-  text-align: center;
-  box-shadow: 0 2px 12px rgba(74,124,255,0.06);
+  padding: 28px 28px 24px;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   animation: fadeInUp 0.4s both;
+  position: relative;
+  overflow: hidden;
 }
 
-.summary-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; margin-bottom: 8px; }
+.summary-label { font-size: 13px; color: #fff; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+
+.summary-label svg { width: 16px; height: 16px; opacity: 1; }
 
 .summary-amount {
-  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-size: clamp(2.2rem, 7vw, 3rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
-  color: var(--color-total);
+  color: #ffffff;
   transition: all var(--transition-normal);
 }
 
-.summary-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.summary-amount-unit { font-size: 0.5em; font-weight: 500; opacity: 0.7; margin-left: 2px; }
+
+.summary-sub { font-size: 12px; color: #ddd; margin-top: 8px; }
 
 .summary-pills {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-default);
-  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.05);
   font-variant-numeric: tabular-nums;
 }
 
-.pill.coral { background: var(--accent-coral-dim); color: var(--accent-coral); }
-.pill.green { background: var(--accent-green-dim); color: var(--accent-green); }
-.pill-label { font-weight: 500; font-size: 11px; opacity: 0.8; }
+.pill-label { font-weight: 500; font-size: 12px; color: #ccc; display: flex; align-items: center; gap: 6px; }
+.pill-label svg { width: 14px; height: 14px; }
+
+.pill .pill-value { font-size: 1.3rem; font-weight: 700; color: #ffffff; }
+
+.pill.coral { background: rgba(255,255,255,0.05); }
+.pill.green { background: rgba(255,255,255,0.05); }
 
 /* === COMPARISON SECTION === */
 .comparison-header {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.comparison-header .icon-wrap {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-blue-dim);
-  color: var(--accent-blue);
+.comparison-header .icon-wrap { display: none; }
+
+.comparison-header h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+.comparison-header .auto-tag { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+/* Recommendation banner */
+.recommend-banner {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  padding: 14px 18px;
+  background: var(--accent-teal-dim);
+  border: 1px solid rgba(5,164,188,0.15);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
-.comparison-header .icon-wrap svg { width: 16px; height: 16px; }
-.comparison-header h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.recommend-banner svg { width: 18px; height: 18px; color: var(--accent-teal); flex-shrink: 0; }
+.recommend-banner strong { color: var(--accent-teal); }
 
 .comp-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
@@ -327,7 +371,20 @@ body {
   position: relative;
 }
 
-.comp-card.winner { border-color: var(--accent-blue); box-shadow: 0 2px 16px rgba(74,124,255,0.12); }
+.comp-card.winner { border-color: var(--accent-teal); box-shadow: 0 2px 16px rgba(5,164,188,0.12); }
+
+.comp-card .recommend-badge {
+  display: none;
+  text-align: center;
+  padding: 6px;
+  background: var(--accent-teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.comp-card.winner .recommend-badge { display: block; }
 
 .comp-card-head {
   padding: 14px 18px;
@@ -345,8 +402,8 @@ body {
   gap: 4px;
   padding: 4px 10px;
   border-radius: 100px;
-  background: rgba(74,124,255,0.1);
-  color: var(--accent-blue);
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
   font-size: 11px;
   font-weight: 700;
 }
@@ -373,7 +430,7 @@ body {
   color: var(--text-primary);
 }
 
-.comp-row-value.green { color: var(--accent-green); }
+.comp-row-value.green { color: var(--accent-mint); }
 
 .comp-row.total {
   padding-top: 12px;
@@ -383,21 +440,52 @@ body {
 }
 
 .comp-row.total .comp-row-label { font-weight: 700; color: var(--text-primary); font-size: 14px; }
-.comp-row.total .comp-row-value { font-size: 18px; font-weight: 800; color: var(--accent-blue); }
+.comp-row.total .comp-row-value { font-size: 18px; font-weight: 800; color: var(--text-primary); }
 
 /* === DETAIL BREAKDOWN === */
+.detail-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
 
-.detail-card {
+.detail-section-header h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+
+.detail-section-header .current-tag {
+  padding: 6px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
   background: var(--bg-card);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  margin-top: 12px;
   overflow: hidden;
 }
 
-.detail-card .card-header { padding: 14px 18px; }
-.detail-card .card-body { padding: 14px 18px; }
+.detail-card {
+  background: var(--bg-card);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+.detail-card + .detail-card { border-top: 1px solid var(--border-default); }
+
+.detail-card .card-header { padding: 16px 20px; }
+.detail-card .card-body { padding: 14px 20px; }
 
 .data-row {
   display: flex;
@@ -419,8 +507,8 @@ body {
   transition: all var(--transition-normal);
 }
 
-.data-value.highlight { font-size: 15px; font-weight: 700; color: var(--accent-blue); }
-.data-value.negative { color: var(--color-discount); }
+.data-value.highlight { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.data-value.negative { color: var(--accent-mint); }
 
 .data-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
@@ -490,25 +578,32 @@ body {
   .form-label { flex: 0 0 110px; }
 }
 
+/* === RESPONSIVE: mobile === */
+@media (max-width: 767px) {
+  .hero-inner { text-align: center; }
+  .hero-top { justify-content: center; }
+  .comp-grid { grid-template-columns: 1fr; }
+}
+
 /* === RESPONSIVE: tablet 768px === */
 @media (min-width: 768px) {
-  .main-wrap { padding: 0 24px 80px; }
-  .two-col { flex-direction: row; }
-  .col-left { width: 40%; min-width: 340px; }
-  .col-right { width: 60%; }
+  .main-wrap { padding: 32px 24px 80px; }
+  .two-col { flex-direction: row; gap: 28px; }
+  .col-left { width: 38%; min-width: 320px; }
+  .col-right { width: 62%; }
   .comp-grid { grid-template-columns: 1fr 1fr; }
-  .hero-header h1 { font-size: 2rem; }
+  .detail-grid { grid-template-columns: 1fr 1fr; }
+  .detail-card + .detail-card { border-top: none; border-left: 1px solid var(--border-default); }
 }
 
 /* === RESPONSIVE: desktop 1024px === */
 @media (min-width: 1024px) {
-  .main-wrap { max-width: 1200px; padding: 0 40px 100px; }
+  .main-wrap { max-width: 1280px; padding: 36px 40px 100px; }
   .col-left {
     position: sticky;
     top: 20px;
     align-self: flex-start;
   }
-  .hero-header h1 { font-size: 2.2rem; }
   .card-body { padding: 18px 24px; }
   .card-header { padding: 18px 24px; }
 }
@@ -520,28 +615,30 @@ body {
 <input type="hidden" id="referralBenefit" value="0">
 <input type="hidden" id="corpDiscount" value="0">
 
-<!-- Hero Header -->
+<!-- Nav Bar -->
 <div class="hero-header">
-  <div class="hero-inner">
-    <h1>간편 견적 확인</h1>
-    <p>고객 구매 사항을 선택하면 자동으로 계산됩니다</p>
+  <div class="hero-top">
+    <div class="hero-logo"><svg width="103" height="30" viewBox="0 0 103 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.1593 24.7131L11.4656 17.7213L19.7311 7.54155H15.2231C13.1965 7.54155 11.8128 8.1625 10.5831 9.59754L6.22663 14.9539V0.244141H1.86041C0.83364 0.244141 0 1.07778 0 2.107V29.556H4.36622C5.39544 29.556 6.22663 28.7224 6.22663 27.6932V20.3909L9.76899 24.7302L12.776 28.4339C13.3847 29.2015 14.1841 29.5536 15.0006 29.5536H21.1001L17.1593 24.7106V24.7131Z" fill="#221E1F"/><path d="M28.3587 29.556C24.9997 29.556 22.6675 27.236 22.6675 23.8672V2.10455C22.6675 1.07534 23.5036 0.244141 24.5352 0.244141H28.9063V22.7011C28.9063 23.6252 29.6569 24.3757 30.5761 24.3757H35.0278V27.6956C35.0278 28.7248 34.1918 29.5585 33.1601 29.5585H28.3587V29.556Z" fill="#221E1F"/><path d="M6.82081 14.2011L6.82814 14.1913C6.82814 14.1913 6.82081 14.1986 6.81592 14.2011H6.82081ZM35.9273 5.92578L35.546 6.32916C35.5215 6.33649 34.3603 7.53439 30.9939 7.53439H15.1108C12.6025 7.53439 11.4217 8.55627 10.5196 9.66127L10.0209 10.2749C10.0087 10.292 9.99646 10.3018 9.98424 10.314L6.83059 14.1937C7.9747 13.3308 9.55153 12.8125 11.1528 12.8125H30.9939C33.4044 12.8125 35.7146 12.0962 35.9053 10.2969C35.9298 10.1527 35.9273 10.0646 35.9273 10.0646V5.92823V5.92578Z" fill="#EC1B23"/><path d="M44.2563 12.8361C44.2563 12.2176 44.5473 11.89 45.2024 11.89H48.1018V12.8679C49.3071 12.0856 50.8057 11.6309 52.3067 11.6309C54.2967 11.6309 55.5019 12.2494 56.4798 13.3568C57.5579 12.6087 59.3792 11.6309 61.8264 11.6309C65.3809 11.6309 67.2682 13.7162 67.2682 17.0727V28.3843C67.2682 28.9368 66.9773 29.1984 66.4542 29.1984H63.4252V17.6595C63.4252 15.9629 62.6404 15.0852 60.9781 15.0852C59.8046 15.0852 58.5651 15.6059 57.6533 16.3565C57.6875 16.5838 57.6875 16.8112 57.6875 17.0727V28.3843C57.6875 28.9368 57.3966 29.1984 56.8734 29.1984H53.8395V17.6595C53.8395 15.9629 53.0548 15.0852 51.3924 15.0852C50.219 15.0852 48.9819 15.6059 48.1018 16.3222V28.3501C48.1018 28.9051 47.7767 29.1984 47.124 29.1984H44.2563V12.8361Z" fill="#EC1B23"/><path d="M92.3066 28.6744C91.9814 28.4446 91.6245 28.0559 91.6245 27.567L91.6563 25.1198C93.0253 25.8044 94.7831 26.1637 96.4797 26.1637C98.367 26.1637 99.0882 25.3814 99.0882 24.4035C99.0882 23.4257 98.697 22.8072 97.4258 22.35L95.7585 21.7633C93.348 20.915 91.7199 19.5459 91.7199 16.7101C91.7199 13.158 94.2281 11.8867 98.1078 11.8867C99.6382 11.8867 101.105 11.8207 101.824 11.5273V14.395C101.824 15.0819 100.259 15.2775 98.2692 15.2775C96.509 15.2775 95.6314 15.6662 95.6314 16.7761C95.6314 17.4948 95.9272 18.0473 97.0664 18.4385L98.697 18.9934C101.107 19.81 103 21.2743 103 24.2397C103 27.5988 101.076 29.5545 96.2816 29.5545C94.9811 29.5545 93.1524 29.1951 92.3066 28.6744Z" fill="#EC1B23"/><path d="M79.2475 19.0506C78.9981 18.7353 79.069 18.5788 79.4724 18.5788H82.0197C82.3107 18.5788 82.538 18.6204 82.6945 18.7059C82.8534 18.7866 83.005 18.9382 83.1541 19.1435L89.9821 28.338C90.1288 28.5703 90.0677 28.6827 89.7939 28.6827H86.8676C86.5718 28.6827 86.2784 28.5043 85.9826 28.1498L84.7578 26.5118C83.9388 27.6022 82.9194 28.4163 81.7044 28.9516C80.4869 29.487 79.1546 29.7559 77.7073 29.7559C76.5558 29.7559 75.5169 29.5995 74.5928 29.2841C73.6662 28.9688 72.8839 28.5287 72.2459 27.9615C71.6078 27.3944 71.1115 26.7123 70.7644 25.9153C70.4197 25.1208 70.2461 24.2481 70.2461 23.3044C70.2461 22.2312 70.4368 21.2875 70.8157 20.471C71.1946 19.652 71.6762 18.9186 72.2654 18.2683C72.8497 17.618 73.5073 17.0411 74.2309 16.535C74.9546 16.0314 75.6513 15.5718 76.3212 15.1538C76.595 14.9827 76.9446 14.77 77.3748 14.5206C77.8075 14.2713 78.2256 13.9877 78.6363 13.6723C79.047 13.3569 79.3917 13.0269 79.6899 12.6798C79.9809 12.3351 80.1275 11.9732 80.1275 11.5968C80.1275 11.0932 79.9295 10.6898 79.5335 10.3842C79.135 10.0786 78.5972 9.92704 77.9249 9.92704C77.0472 9.92704 76.4409 10.1251 76.1207 10.5089C75.7931 10.9 75.6293 11.3327 75.6293 11.8168C75.6293 12.1737 75.6782 12.4793 75.7858 12.7287C75.8909 12.9805 75.996 13.2005 76.1011 13.3887C76.2258 13.577 76.1867 13.6723 75.9765 13.6723H74.6221C73.8251 13.6723 73.2677 13.4107 72.9499 12.8851C72.637 12.3595 72.4805 11.7312 72.4805 10.9954C72.4805 10.3646 72.6199 9.79014 72.8864 9.26697C73.1602 8.74136 73.5391 8.29398 74.0207 7.92972C74.5023 7.56302 75.0866 7.28188 75.7687 7.09364C76.4483 6.9054 77.1866 6.8125 77.986 6.8125C78.871 6.8125 79.6582 6.93718 80.3476 7.18898C81.0419 7.44079 81.6286 7.78304 82.1102 8.21331C82.5894 8.64113 82.9585 9.13985 83.2127 9.70702C83.4621 10.2717 83.5892 10.8829 83.5892 11.5308C83.5892 12.2862 83.4181 12.9756 83.071 13.5941C82.7238 14.2126 82.296 14.77 81.7802 15.2736C81.2668 15.7772 80.6996 16.2368 80.0835 16.6451C79.465 17.0533 78.8807 17.4249 78.3356 17.7623C77.7049 18.1608 77.1132 18.5568 76.5583 18.9431C76.0009 19.3342 75.5169 19.7425 75.111 20.1703C74.6979 20.5981 74.3752 21.0675 74.1356 21.5687C73.8936 22.0723 73.7713 22.6297 73.7713 23.2408C73.7713 23.7836 73.874 24.2578 74.072 24.6563C74.2701 25.0548 74.5463 25.3775 74.9057 25.6317C75.2626 25.8811 75.6806 26.0669 76.1647 26.1818C76.6463 26.2967 77.1572 26.3554 77.7049 26.3554C78.2109 26.3554 78.7218 26.282 79.245 26.1354C79.7706 25.9887 80.2571 25.7882 80.7094 25.5364C81.1617 25.2846 81.5601 24.9937 81.9073 24.6685C82.2495 24.3434 82.4965 24.006 82.6456 23.6467L79.245 19.0531L79.2475 19.0506Z" fill="#EC1B23"/></svg></div>
+    <div class="hero-nav-divider"></div>
+    <div class="hero-nav-title">기업 특별 혜택 프로모션</div>
   </div>
 </div>
 
 <!-- Main Content -->
 <div class="main-wrap">
+  <div class="page-title">
+    <h1>견적 설정</h1>
+    <p>고객의 가입 조건을 입력하세요.</p>
+  </div>
   <div class="two-col">
 
     <!-- LEFT: Customer Selection -->
     <div class="col-left">
-      <div class="card" style="animation-delay:0.05s">
-        <div class="card-header">
-          <div class="card-icon blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
-          </div>
+      <div class="card" style="animation-delay:0.05s; border:none; box-shadow:none; background:transparent;">
+        <div class="card-header" style="border:none; padding: 0 0 16px 0;">
           <div>
-            <div class="card-title">고객 선택</div>
-            <div class="card-subtitle">구매 사항을 선택해 주세요</div>
+            <div class="card-title" style="font-size:16px; font-weight:700;">고객 선택</div>
+            <div class="card-subtitle" style="margin-top:4px;">고객의 가입 조건을 입력하세요.</div>
           </div>
         </div>
         <div class="card-body">
@@ -601,33 +698,46 @@ body {
 
       <!-- Section 1: Summary Total -->
       <div class="summary-card" style="animation-delay:0.1s">
-        <div class="summary-label">월 납부 합계</div>
-        <div class="summary-amount" id="grandTotal">0원</div>
-        <div class="summary-sub">24개월 할부 기준 (선택된 할인유형 기준)</div>
+        <div class="summary-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+          최종 월 납부액
+        </div>
+        <div class="summary-amount" id="grandTotal">0<span class="summary-amount-unit">원</span></div>
+        <div class="summary-sub">24개월 할부 기준, 부가세 포함</div>
         <div class="summary-pills">
           <div class="pill coral">
-            <span class="pill-label">폰할부금(월)</span>
-            <span id="breakdownPhone">0원</span>
+            <span class="pill-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              월 단말기 할부금
+            </span>
+            <span class="pill-value" id="breakdownPhone">0원</span>
           </div>
           <div class="pill green">
-            <span class="pill-label">통신요금(월)</span>
-            <span id="breakdownPlan">0원</span>
+            <span class="pill-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              월 통신요금
+            </span>
+            <span class="pill-value" id="breakdownPlan">0원</span>
           </div>
         </div>
       </div>
 
       <!-- Section 2: Comparison (할인 비교) -->
-      <div style="animation: fadeInUp 0.5s 0.25s both;">
+      <div style="animation: fadeInUp 0.5s 0.25s both; margin-top: 8px;">
         <div class="comparison-header">
-          <div class="icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 12H3"/><path d="M21 12H17"/><path d="M6 7l-4 5 4 5"/><path d="M18 7l4 5-4 5"/></svg>
-          </div>
-          <h3>할인 비교 (공시할인 vs 요금할인)</h3>
+          <h3>할인 제도 비교</h3>
+          <span class="auto-tag">자동 추천</span>
+        </div>
+
+        <div class="recommend-banner" id="recommendBanner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span id="recommendText">고객님의 조건에서는 <strong>요금할인</strong>을 선택하시는 것이 <strong>월 16,897원</strong> 더 유리합니다.</span>
         </div>
 
         <div class="comp-grid">
           <!-- Public Subsidy Card -->
           <div class="comp-card" id="compCardPublic">
+            <div class="recommend-badge">추천</div>
             <div class="comp-card-head">
               <span class="comp-card-title">공시할인</span>
               <span class="savings-badge" id="compPublicBadge"></span>
@@ -662,6 +772,7 @@ body {
 
           <!-- Fee Discount Card -->
           <div class="comp-card" id="compCardFee">
+            <div class="recommend-badge">추천</div>
             <div class="comp-card-head">
               <span class="comp-card-title">요금할인</span>
               <span class="savings-badge" id="compFeeBadge"></span>
@@ -700,8 +811,13 @@ body {
         </div>
       </div>
 
-      <!-- Section 3: Phone Purchase Detail -->
-      <div class="detail-card" style="animation: fadeInUp 0.5s 0.3s both;">
+      <!-- Section 3+4: Detail -->
+      <div class="detail-section-header">
+        <h3>상세 견적 내역</h3>
+        <span class="current-tag" id="currentDiscountTag">현재 선택: 공시할인</span>
+      </div>
+      <div class="detail-grid" style="animation: fadeInUp 0.5s 0.3s both;">
+      <div class="detail-card">
         <div class="card-header">
           <div class="card-icon blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
@@ -752,7 +868,7 @@ body {
       </div>
 
       <!-- Section 4: Plan Fee Detail -->
-      <div class="detail-card" style="animation: fadeInUp 0.5s 0.35s both;">
+      <div class="detail-card">
         <div class="card-header">
           <div class="card-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
@@ -782,6 +898,7 @@ body {
           </div>
         </div>
       </div>
+      </div><!-- /detail-grid -->
 
     </div>
   </div>
@@ -825,20 +942,67 @@ var $monthlyPlanNet, $grandTotal, $breakdownPhone, $breakdownPlan;
 // INIT SELECTS
 // ============================================================
 function initSelects() {
-  // Models
+  // Models — grouped by manufacturer
+  const modelGroups = {};
   for (const [code, name] of Object.entries(MODEL_MAP)) {
-    const opt = document.createElement('option');
-    opt.value = code;
-    opt.textContent = name;
-    $modelSelect.appendChild(opt);
+    let brand = '기타';
+    const n = name.toLowerCase();
+    if (n.includes('iphone') || n.includes('ipad')) brand = 'Apple';
+    else if (n.includes('갤럭시') || n.includes('galaxy')) brand = 'Samsung';
+    else if (n.includes('모토로라') || n.includes('moto') || n.includes('edge')) brand = 'Motorola';
+    else if (n.includes('샤오미') || n.includes('레드미') || n.includes('xiaomi') || n.includes('redmi')) brand = 'Xiaomi';
+    else if (n.includes('시나모롤') || n.includes('폼폼푸린') || n.includes('키즈폰') || n.includes('맘편안')) brand = '키즈/시니어';
+    else if (n.includes('클래식 폴더') || n.includes('폴더')) brand = '폴더폰';
+    if (!modelGroups[brand]) modelGroups[brand] = [];
+    modelGroups[brand].push({ code, name });
+  }
+  const brandOrder = ['Apple', 'Samsung', 'Motorola', 'Xiaomi', '키즈/시니어', '폴더폰', '기타'];
+  for (const brand of brandOrder) {
+    if (!modelGroups[brand] || modelGroups[brand].length === 0) continue;
+    const group = document.createElement('optgroup');
+    group.label = brand;
+    for (const { code, name } of modelGroups[brand]) {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = name;
+      group.appendChild(opt);
+    }
+    $modelSelect.appendChild(group);
   }
 
-  // Plans
+  // Plans — grouped by fee range
+  const planGroups = {};
+  const ranges = [
+    { label: '프리미엄 (10만원 이상)', min: 100000, max: Infinity },
+    { label: '스페셜 (8만~10만원)', min: 80000, max: 99999 },
+    { label: '베이직 (6만~8만원)', min: 60000, max: 79999 },
+    { label: '심플 (4만~6만원)', min: 40000, max: 59999 },
+    { label: '슬림 (2만~4만원)', min: 20000, max: 39999 },
+    { label: '기타 (2만원 미만)', min: 0, max: 19999 }
+  ];
+  for (const r of ranges) planGroups[r.label] = [];
   for (const planName of Object.keys(PLAN_DATA)) {
-    const opt = document.createElement('option');
-    opt.value = planName;
-    opt.textContent = planName;
-    $planSelect.appendChild(opt);
+    const fee = PLAN_DATA[planName].fee;
+    for (const r of ranges) {
+      if (fee >= r.min && fee <= r.max) {
+        planGroups[r.label].push({ name: planName, fee });
+        break;
+      }
+    }
+  }
+  for (const r of ranges) {
+    const items = planGroups[r.label];
+    if (!items || items.length === 0) continue;
+    items.sort((a, b) => b.fee - a.fee);
+    const group = document.createElement('optgroup');
+    group.label = r.label;
+    for (const { name } of items) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      group.appendChild(opt);
+    }
+    $planSelect.appendChild(group);
   }
 }
 
