@@ -536,6 +536,63 @@ async function main() {
       console.error('  GitHub push 실패:', msg);
     }
   }
+
+  // ── Step 5: MGM 페이지 자동 동기화 ──
+  const MGM_DIR = path.join(BASE_DIR, '..', 'MGM');
+  const MGM_HTML = path.join(MGM_DIR, 'mgm_calculator.html');
+  const MGM_INDEX = path.join(MGM_DIR, 'index.html');
+
+  if (!fs.existsSync(MGM_HTML)) {
+    console.log('\n[5/5] MGM 폴더 없음 - 건너뜀');
+    return;
+  }
+
+  console.log('\n[5/5] MGM 페이지 동기화 중...');
+
+  function extractVar(html, varName) {
+    const marker = 'const ' + varName + ' = ';
+    const start = html.indexOf(marker);
+    if (start === -1) return null;
+    const braceStart = html.indexOf('{', start);
+    let depth = 0, end = -1;
+    for (let i = braceStart; i < html.length; i++) {
+      if (html[i] === '{') depth++;
+      if (html[i] === '}') depth--;
+      if (depth === 0) { end = i; break; }
+    }
+    const semi = html.indexOf(';', end);
+    return { start, end: semi + 1, content: html.substring(start, semi + 1) };
+  }
+
+  const srcHtml = fs.readFileSync(HTML_FILE, 'utf8');
+  let dstHtml = fs.readFileSync(MGM_HTML, 'utf8');
+
+  for (const v of ['MODEL_MAP', 'PRICE_MAP', 'PLAN_DATA', 'SUBSIDY_DATA']) {
+    const s = extractVar(srcHtml, v);
+    const d = extractVar(dstHtml, v);
+    if (!s || !d) { console.log('  ' + v + ': NOT FOUND - 건너뜀'); continue; }
+    const changed = s.content !== d.content;
+    console.log('  ' + v + ': ' + (changed ? '업데이트' : '변경없음'));
+    dstHtml = dstHtml.substring(0, d.start) + s.content + dstHtml.substring(d.end);
+  }
+
+  fs.writeFileSync(MGM_HTML, dstHtml);
+  fs.writeFileSync(MGM_INDEX, dstHtml);
+  console.log('  MGM 파일 저장 완료');
+
+  try {
+    execSync('git add mgm_calculator.html index.html', { cwd: MGM_DIR, stdio: 'pipe' });
+    execSync(`git commit -m "data: ${todayFmt} KT 공통지원금 자동 동기화"`, { cwd: MGM_DIR, stdio: 'pipe' });
+    execSync('git push origin main', { cwd: MGM_DIR, stdio: 'pipe' });
+    console.log('  MGM GitHub Pages 배포 완료!');
+  } catch (e) {
+    const msg = e.stderr ? e.stderr.toString() : e.message;
+    if (msg.includes('nothing to commit')) {
+      console.log('  MGM 변경사항 없음 - push 건너뜀');
+    } else {
+      console.error('  MGM GitHub push 실패:', msg);
+    }
+  }
 }
 
 // ── 실행 ──
