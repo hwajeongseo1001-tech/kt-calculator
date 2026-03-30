@@ -214,7 +214,7 @@ function postRequest(urlStr, bodyStr) {
       });
     });
     req.on('error', reject);
-    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Request timeout')); });
+    req.setTimeout(60000, () => { req.destroy(); reject(new Error('Request timeout')); });
     req.write(bodyStr);
     req.end();
   });
@@ -249,7 +249,16 @@ async function fetchSubsidyForPlan(onfrmCd, sbscTypeCd) {
 
   while (pageNo <= totalPages) {
     const body = `prodNm=mobile&prdcCd=${onfrmCd}&prodType=30&deviceType=HDP&makrCd=&sortProd=oBspnsrPunoDateDesc&spnsMonsType=undefined&dscnOptnCd=HT&sbscTypeCd=${sbscTypeCd}&pageNo=${pageNo}`;
-    const res = await postRequest('https://shop.kt.com/mobile/retvSuFuList.json', body);
+    let res;
+    for (let retry = 0; retry < 3; retry++) {
+      try {
+        res = await postRequest('https://shop.kt.com/mobile/retvSuFuList.json', body);
+        break;
+      } catch (e) {
+        if (retry < 2) { console.log(`    재시도 ${retry+1}/3...`); await sleep(3000); }
+        else throw e;
+      }
+    }
     const data = typeof res === 'string' ? JSON.parse(res) : res;
 
     const list = data.LIST_DATA || [];
@@ -432,11 +441,21 @@ async function main() {
     'const PRICE_MAP = ' + JSON.stringify(newPriceMap) + ';'
   );
 
-  // SUBSIDY_DATA 교체
-  html = html.replace(
-    /const SUBSIDY_DATA = \{[\s\S]*?\};\s*\n(?=function getSubsidy)/,
-    'const SUBSIDY_DATA = ' + JSON.stringify(newSubsidyData) + ';\n'
-  );
+  // SUBSIDY_DATA 교체 (중첩된 JSON이므로 정규식 대신 indexOf 사용)
+  const sdStart = html.indexOf('const SUBSIDY_DATA = {');
+  const sdSearchFrom = sdStart + 'const SUBSIDY_DATA = '.length;
+  // JSON 끝 찾기: 중괄호 매칭
+  let braceCount = 0;
+  let sdEnd = -1;
+  for (let i = sdSearchFrom; i < html.length; i++) {
+    if (html[i] === '{') braceCount++;
+    else if (html[i] === '}') { braceCount--; if (braceCount === 0) { sdEnd = i + 1; break; } }
+  }
+  if (sdStart !== -1 && sdEnd !== -1) {
+    // ';' 포함
+    while (sdEnd < html.length && (html[sdEnd] === ';' || html[sdEnd] === '\n')) sdEnd++;
+    html = html.substring(0, sdStart) + 'const SUBSIDY_DATA = ' + JSON.stringify(newSubsidyData) + ';\n' + html.substring(sdEnd);
+  }
 
   // Notes 섹션 날짜 업데이트
   const today = new Date();
@@ -461,10 +480,19 @@ async function main() {
       /const PRICE_MAP = \{[^;]*\};/,
       'const PRICE_MAP = ' + JSON.stringify(newPriceMap) + ';'
     );
-    adminHtml = adminHtml.replace(
-      /const SUBSIDY_DATA = \{[\s\S]*?\};\s*\n(?=function getSubsidy)/,
-      'const SUBSIDY_DATA = ' + JSON.stringify(newSubsidyData) + ';\n'
-    );
+    // SUBSIDY_DATA 교체 (중첩 JSON → indexOf 사용)
+    const asdStart = adminHtml.indexOf('const SUBSIDY_DATA = {');
+    const asdSearchFrom = asdStart + 'const SUBSIDY_DATA = '.length;
+    let aBraceCount = 0;
+    let asdEnd = -1;
+    for (let i = asdSearchFrom; i < adminHtml.length; i++) {
+      if (adminHtml[i] === '{') aBraceCount++;
+      else if (adminHtml[i] === '}') { aBraceCount--; if (aBraceCount === 0) { asdEnd = i + 1; break; } }
+    }
+    if (asdStart !== -1 && asdEnd !== -1) {
+      while (asdEnd < adminHtml.length && (adminHtml[asdEnd] === ';' || adminHtml[asdEnd] === '\n')) asdEnd++;
+      adminHtml = adminHtml.substring(0, asdStart) + 'const SUBSIDY_DATA = ' + JSON.stringify(newSubsidyData) + ';\n' + adminHtml.substring(asdEnd);
+    }
     adminHtml = adminHtml.replace(
       /공통지원금 데이터 기준일: .*?\(KT 공식 온라인샵 기준\)/,
       `공통지원금 데이터 기준일: ${dateStr} (KT 공식 온라인샵 기준)`
