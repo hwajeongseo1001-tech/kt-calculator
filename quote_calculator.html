@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>납품 정책 견적서</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-base: #f6f6f6;
+  --bg-card: #ffffff;
+  --bg-input: #f9f9f9;
+  --border-default: #e0e0e0;
+  --border-hover: #b9b9b9;
+  --border-focus: rgba(5,164,188,0.45);
+  --text-primary: #221e1f;
+  --text-secondary: #4c4c4e;
+  --text-muted: #b9b9b9;
+  --kt-red: #EC1B23;
+  --kt-red-dim: rgba(236,27,35,0.08);
+  --accent-teal: #05A4BC;
+  --accent-teal-dim: rgba(5,164,188,0.08);
+  --accent-mint: #00A9A7;
+  --accent-mint-dim: rgba(0,169,167,0.08);
+  --color-discount: #00A9A7;
+  --color-highlight: #05A4BC;
+  --color-phone: #EC1B23;
+  --color-plan: #05A4BC;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06);
+  --transition-fast: 150ms cubic-bezier(0.16,1,0.3,1);
+  --transition-normal: 300ms cubic-bezier(0.16,1,0.3,1);
+}
+
+html {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--text-primary);
+  background: var(--bg-base);
+}
+
+body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
+
+.hero-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.hero-top {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-logo { display: flex; align-items: center; gap: 10px; }
+.hero-logo img { height: 36px; }
+.hero-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+.hero-sep { width: 1px; height: 20px; background: var(--border-default); }
+.hero-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+
+.main-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 32px 60px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* === LEFT PANEL: INPUT FORM === */
+.panel-input {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 28px 24px;
+  position: sticky;
+  top: 20px;
+}
+
+.panel-input h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-group select,
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  transition: border var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234c4c4e' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px var(--border-focus);
+}
+
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.input-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.toggle-row label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider { background: var(--accent-teal); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+.btn-pdf {
+  width: 100%;
+  padding: 14px;
+  background: var(--kt-red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  margin-top: 8px;
+}
+
+.btn-pdf:hover { background: #d01920; }
+.btn-pdf:active { transform: scale(0.98); }
+
+/* === RIGHT PANEL: RESULTS === */
+.panel-result { display: flex; flex-direction: column; gap: 20px; }
+
+.result-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.result-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-card h3 .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kt-red);
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.data-row:last-child { border-bottom: none; }
+.data-row .label { color: var(--text-secondary); }
+.data-row .value { font-weight: 600; font-variant-numeric: tabular-nums; }
+.data-row .value.discount { color: var(--color-discount); }
+.data-row .value.highlight { color: var(--color-highlight); font-weight: 700; }
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.spec-row .spec-label { color: var(--text-secondary); min-width: 65px; }
+.spec-row .spec-value { text-align: right; font-weight: 500; flex: 1; margin-left: 8px; }
+
+.total-card {
+  background: var(--text-primary);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-card .total-label { font-size: 18px; font-weight: 700; }
+.total-card .total-value { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.total-card .total-sub {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.total-left { display: flex; flex-direction: column; }
+
+.notes {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  padding: 12px 0;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .main-wrap {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .panel-input { position: static; }
+}
+
+/* === ANIMATION === */
+.value-update {
+  animation: pulse 0.3s ease;
+}
+@keyframes pulse {
+  0% { opacity: 0.5; transform: translateY(-2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<header class="hero-header">
+  <div class="hero-top">
+    <div class="hero-logo">
+      <img src="kt_logo.png" alt="KT">
+    </div>
+    <div class="hero-sep"></div>
+    <span class="hero-subtitle">납품 정책 견적서</span>
+  </div>
+</header>
+
+<main class="main-wrap">
+  <!-- LEFT: INPUT PANEL -->
+  <div class="panel-input">
+    <h2>견적 조건 입력</h2>
+
+    <div class="form-group">
+      <label for="openType">개통유형</label>
+      <select id="openType">
+        <option value="기기변경">기기변경</option>
+        <option value="번호이동">번호이동</option>
+        <option value="신규가입">신규가입</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="deviceType">단말 유형</label>
+      <select id="deviceType">
+        <option value="phone">휴대폰</option>
+        <option value="tablet">태블릿</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="modelSelect">단말 선택</label>
+      <select id="modelSelect">
+        <option value="">단말을 선택하세요</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="planSelect">요금제</label>
+      <select id="planSelect">
+        <option value="">요금제를 선택하세요</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="ktSubsidy">KT 지원금 (원)</label>
+      <input type="number" id="ktSubsidy" value="0" min="0" step="10000" placeholder="수기 입력">
+      <div class="input-hint">KT 지원금을 직접 입력하세요</div>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-switch">
+        <input type="checkbox" id="feeDiscount">
+        <span class="toggle-slider"></span>
+      </div>
+      <label for="feeDiscount">선택약정할인 적용 (요금 25% 할인)</label>
+    </div>
+
+    <button class="btn-pdf" onclick="generatePrintPage()">PDF 견적서 출력</button>
+  </div>
+
+  <!-- RIGHT: RESULTS -->
+  <div class="panel-result">
+    <!-- TOTAL -->
+    <div class="total-card">
+      <div class="total-left">
+        <div class="total-label">월 예상 납부금</div>
+        <div class="total-sub">
+          <span>할부금 <strong id="breakdownPhone">0원</strong></span>
+          <span>요금 <strong id="breakdownPlan">0원</strong></span>
+        </div>
+      </div>
+      <div class="total-value" id="grandTotal">0원</div>
+    </div>
+
+    <!-- 단말 정보 -->
+    <div class="result-card">
+      <h3><span class="dot"></span> 단말 정보</h3>
+      <div class="data-row">
+        <span class="label">단말명</span>
+        <span class="value" id="deviceName">-</span>
+      </div>
+      <div class="data-row">
+        <span class="label">출고가</span>
+        <span class="value" id="retailPrice">0원</span>
+      </div>
+      <div class="data-row">
+        <span class="label">KT 지원금</span>
+        <span class="value discount" id="subsidyDisplay">0원</span>
+      </div>
+      <div class="data-row">
+        <span class="label">할부원금</span>
+        <span class="value highlight" id="installmentBase">0원</span>
+      </div>
+    </div>
+
+    <!-- 단말 스펙 -->
+    <div class="result-card">
+      <h3><span class="dot" style="background: var(--accent-teal)"></span> 단말 스펙</h3>
+      <div id="specContainer">
+        <div class="data-row"><span class="label">디스플레이</span><span class="value" id="specDisplay">-</span></div>
+        <div class="data-row"><span class="label">프로세서</span><span class="value" id="specProcessor">-</span></div>
+        <div class="data-row"><span class="label">저장공간</span><span class="value" id="specStorage">-</span></div>
+        <div class="data-row"><span class="label">카메라</span><span class="value" id="specCamera">-</span></div>
+        <div class="data-row"><span class="label">배터리</span><span class="value" id="specBattery">-</span></div>
+        <div class="data-row"><span class="label">네트워크</span><span class="value" id="specNetwork">-</span></div>
+      </div>
+    </div>
+
+    <!-- 할부 정보 -->
+    <div class="result-card">
+      <h3><span class="dot" style="background: var(--color-phone)"></span> 할부 정보</h3>
+      <div class="data-row">
+        <span class="label">할부 조건</span>
+        <span class="value">24개월 / 연 5.9%</span>
+      </div>
+      <div class="data-row">
+        <span class="label">월 할부금</span>
+        <span class="value highlight" id="monthlyInstallment">0원</span>
+      </div>
+    </div>
+
+    <!-- 요금제 -->
+    <div class="result-card">
+      <h3><span class="dot" style="background: var(--color-plan)"></span> 요금제</h3>
+      <div class="data-row">
+        <span class="label">요금제명</span>
+        <span class="value" id="planName">-</span>
+      </div>
+      <div class="data-row">
+        <span class="label">기본 요금</span>
+        <span class="value" id="planBaseFee">0원</span>
+      </div>
+      <div class="data-row" id="discountRow" style="display:none">
+        <span class="label">선택약정 할인 (25%)</span>
+        <span class="value discount" id="planDiscountAmt">0원</span>
+      </div>
+      <div class="data-row">
+        <span class="label">할인 적용 요금</span>
+        <span class="value highlight" id="planFinalFee">0원</span>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="notes">
+      ※ 본 견적은 참고용이며 실제 개통 시점 및 부가서비스 이용에 따라 달라질 수 있습니다.<br>
+      ※ 약정기간 내 해지 시 할인반환금이 부과될 수 있습니다.<br>
+      ※ USIM 신규 발급 시 7,700원, eSIM은 2,750원이 1회 청구됩니다.
+    </div>
+  </div>
+</main>
+
+<script src="quote_data.js"></script>
+<script>
+// ===== DATA (정적) =====
+// PHONE_MODEL_MAP, PHONE_PRICE_MAP, PLAN_DATA → quote_data.js에서 로드 (node quote_update.js로 업데이트)
+
+// 태블릿 데이터 (엑셀 출고가 기준, 모델+용량별)
+const TABLET_DATA = {
+  // 삼성 갤럭시 탭
+  "TAB-S10P-256":"갤럭시 탭 S10+ 256GB","TAB-S10P-512":"갤럭시 탭 S10+ 512GB",
+  "TAB-S10U-256":"갤럭시 탭 S10 Ultra 256GB","TAB-S10U-512":"갤럭시 탭 S10 Ultra 512GB","TAB-S10U-1T":"갤럭시 탭 S10 Ultra 1TB",
+  "TAB-S10FE-128":"갤럭시 탭 S10 FE 128GB","TAB-S10FE-256":"갤럭시 탭 S10 FE 256GB",
+  "TAB-S10FEP-128":"갤럭시 탭 S10 FE+ 128GB","TAB-S10FEP-256":"갤럭시 탭 S10 FE+ 256GB",
+  "TAB-S10L-128":"갤럭시 탭 S10 Lite 128GB","TAB-S10L-256":"갤럭시 탭 S10 Lite 256GB",
+  "TAB-S11U-256":"갤럭시 탭 S11 Ultra 256GB","TAB-S11U-512":"갤럭시 탭 S11 Ultra 512GB",
+  "TAB-S11-128":"갤럭시 탭 S11 128GB","TAB-S11-256":"갤럭시 탭 S11 256GB",
+  "TAB-A11P-128":"갤럭시 탭 A11+ 128GB","TAB-A11P-256":"갤럭시 탭 A11+ 256GB",
+  "TAB-A11-64":"갤럭시 탭 A11 64GB","TAB-A11-128":"갤럭시 탭 A11 128GB",
+  "TAB-ACT5-128":"갤럭시 탭 Active5 128GB",
+  "TAB-ACT4P-64":"갤럭시 탭 Active4 Pro 64GB",
+  "TAB-ACT5P-128":"갤럭시 탭 Active5 Pro 128GB",
+  "TAB-ACT5PE-128":"갤럭시 탭 Active5 Pro EE 128GB",
+  // iPad Air
+  "IPAD-AIR11-M4-128":"iPad Air 11\" M4 128GB","IPAD-AIR11-M4-256":"iPad Air 11\" M4 256GB","IPAD-AIR11-M4-512":"iPad Air 11\" M4 512GB","IPAD-AIR11-M4-1T":"iPad Air 11\" M4 1TB",
+  "IPAD-AIR13-M4-128":"iPad Air 13\" M4 128GB","IPAD-AIR13-M4-256":"iPad Air 13\" M4 256GB","IPAD-AIR13-M4-512":"iPad Air 13\" M4 512GB","IPAD-AIR13-M4-1T":"iPad Air 13\" M4 1TB",
+  "IPAD-AIR11-M3-128":"iPad Air 11\" M3 128GB","IPAD-AIR11-M3-256":"iPad Air 11\" M3 256GB","IPAD-AIR11-M3-512":"iPad Air 11\" M3 512GB","IPAD-AIR11-M3-1T":"iPad Air 11\" M3 1TB",
+  "IPAD-AIR13-M3-128":"iPad Air 13\" M3 128GB","IPAD-AIR13-M3-256":"iPad Air 13\" M3 256GB","IPAD-AIR13-M3-512":"iPad Air 13\" M3 512GB","IPAD-AIR13-M3-1T":"iPad Air 13\" M3 1TB",
+  "IPAD-AIR11-M2-128":"iPad Air 11\" M2 128GB","IPAD-AIR11-M2-256":"iPad Air 11\" M2 256GB","IPAD-AIR11-M2-512":"iPad Air 11\" M2 512GB","IPAD-AIR11-M2-1T":"iPad Air 11\" M2 1TB",
+  "IPAD-AIR13-M2-128":"iPad Air 13\" M2 128GB","IPAD-AIR13-M2-256":"iPad Air 13\" M2 256GB","IPAD-AIR13-M2-512":"iPad Air 13\" M2 512GB","IPAD-AIR13-M2-1T":"iPad Air 13\" M2 1TB",
+  // iPad Pro
+  "IPAD-PRO11-M5-256":"iPad Pro 11\" M5 256GB","IPAD-PRO11-M5-512":"iPad Pro 11\" M5 512GB","IPAD-PRO11-M5-1T":"iPad Pro 11\" M5 1TB","IPAD-PRO11-M5-2T":"iPad Pro 11\" M5 2TB",
+  "IPAD-PRO11-M5N-1T":"iPad Pro 11\" M5 NanoTexture 1TB","IPAD-PRO11-M5N-2T":"iPad Pro 11\" M5 NanoTexture 2TB",
+  "IPAD-PRO13-M5-256":"iPad Pro 13\" M5 256GB","IPAD-PRO13-M5-512":"iPad Pro 13\" M5 512GB","IPAD-PRO13-M5-1T":"iPad Pro 13\" M5 1TB","IPAD-PRO13-M5-2T":"iPad Pro 13\" M5 2TB",
+  "IPAD-PRO13-M5N-1T":"iPad Pro 13\" M5 NanoTexture 1TB","IPAD-PRO13-M5N-2T":"iPad Pro 13\" M5 NanoTexture 2TB",
+  "IPAD-PRO11-M4-256":"iPad Pro 11\" M4 256GB","IPAD-PRO11-M4-512":"iPad Pro 11\" M4 512GB","IPAD-PRO11-M4-1T":"iPad Pro 11\" M4 1TB","IPAD-PRO11-M4-2T":"iPad Pro 11\" M4 2TB",
+  "IPAD-PRO11-M4N-1T":"iPad Pro 11\" M4 NanoTexture 1TB","IPAD-PRO11-M4N-2T":"iPad Pro 11\" M4 NanoTexture 2TB",
+  "IPAD-PRO13-M4-256":"iPad Pro 13\" M4 256GB","IPAD-PRO13-M4-512":"iPad Pro 13\" M4 512GB","IPAD-PRO13-M4-1T":"iPad Pro 13\" M4 1TB","IPAD-PRO13-M4-2T":"iPad Pro 13\" M4 2TB",
+  "IPAD-PRO13-M4N-1T":"iPad Pro 13\" M4 NanoTexture 1TB","IPAD-PRO13-M4N-2T":"iPad Pro 13\" M4 NanoTexture 2TB",
+  // iPad Mini / iPad
+  "IPAD-MINI-A17-128":"iPad mini A17 Pro 128GB",
+  "IPAD-A16-128":"iPad A16 128GB","IPAD-A16-256":"iPad A16 256GB","IPAD-A16-512":"iPad A16 512GB"
+};
+
+const TABLET_PRICE_MAP = {
+  "TAB-S10P-256":1468500,"TAB-S10P-512":1767700,
+  "TAB-S10U-256":1818300,"TAB-S10U-512":1987700,"TAB-S10U-1T":2406800,
+  "TAB-S10FE-128":858000,"TAB-S10FE-256":1037300,
+  "TAB-S10FEP-128":1028500,"TAB-S10FEP-256":1207800,
+  "TAB-S10L-128":628100,"TAB-S10L-256":767800,
+  "TAB-S11U-256":1818300,"TAB-S11U-512":2117500,
+  "TAB-S11-128":1218800,"TAB-S11-256":1368400,
+  "TAB-A11P-128":448800,"TAB-A11P-256":568700,
+  "TAB-A11-64":278300,"TAB-A11-128":398200,
+  "TAB-ACT5-128":799700,
+  "TAB-ACT4P-64":1148400,
+  "TAB-ACT5P-128":1199000,
+  "TAB-ACT5PE-128":1228700,
+  "IPAD-AIR11-M4-128":1199000,"IPAD-AIR11-M4-256":1342000,"IPAD-AIR11-M4-512":1639000,"IPAD-AIR11-M4-1T":1947000,
+  "IPAD-AIR13-M4-128":1496000,"IPAD-AIR13-M4-256":1639000,"IPAD-AIR13-M4-512":1947000,"IPAD-AIR13-M4-1T":2244000,
+  "IPAD-AIR11-M3-128":1199000,"IPAD-AIR11-M3-256":1342000,"IPAD-AIR11-M3-512":1639000,"IPAD-AIR11-M3-1T":1947000,
+  "IPAD-AIR13-M3-128":1639000,"IPAD-AIR13-M3-256":1639000,"IPAD-AIR13-M3-512":1947000,"IPAD-AIR13-M3-1T":2244000,
+  "IPAD-AIR11-M2-128":1122000,"IPAD-AIR11-M2-256":1276000,"IPAD-AIR11-M2-512":1573000,"IPAD-AIR11-M2-1T":1870000,
+  "IPAD-AIR13-M2-128":1419000,"IPAD-AIR13-M2-256":1573000,"IPAD-AIR13-M2-512":1870000,"IPAD-AIR13-M2-1T":2178000,
+  "IPAD-PRO11-M5-256":1892000,"IPAD-PRO11-M5-512":2189000,"IPAD-PRO11-M5-1T":2794000,"IPAD-PRO11-M5-2T":3399000,
+  "IPAD-PRO11-M5N-1T":2948000,"IPAD-PRO11-M5N-2T":3542000,
+  "IPAD-PRO13-M5-256":2398000,"IPAD-PRO13-M5-512":2695000,"IPAD-PRO13-M5-1T":3289000,"IPAD-PRO13-M5-2T":3894000,
+  "IPAD-PRO13-M5N-1T":3443000,"IPAD-PRO13-M5N-2T":4048000,
+  "IPAD-PRO11-M4-256":1793000,"IPAD-PRO11-M4-512":2090000,"IPAD-PRO11-M4-1T":2695000,"IPAD-PRO11-M4-2T":3289000,
+  "IPAD-PRO11-M4N-1T":2849000,"IPAD-PRO11-M4N-2T":3443000,
+  "IPAD-PRO13-M4-256":2299000,"IPAD-PRO13-M4-512":2596000,"IPAD-PRO13-M4-1T":3190000,"IPAD-PRO13-M4-2T":3795000,
+  "IPAD-PRO13-M4N-1T":3344000,"IPAD-PRO13-M4N-2T":3949000,
+  "IPAD-MINI-A17-128":979000,
+  "IPAD-A16-128":770000,"IPAD-A16-256":924000,"IPAD-A16-512":1221000
+};
+
+// ===== 단말 스펙 데이터 =====
+const SPEC_DATA = {
+  // === Samsung 스마트폰 ===
+  "갤럭시 S26 Ultra":{display:"6.9인치 Dynamic AMOLED 2X, QHD+, 120Hz",processor:"Snapdragon 8 Elite Gen 5",camera:"후면 2억+5000만+1000만+5000만 / 전면 1200만",battery:"5000mAh",network:"5G"},
+  "갤럭시 S26+":{display:"6.7인치 Dynamic AMOLED 2X, FHD+, 120Hz",processor:"Snapdragon 8 Elite Gen 5",camera:"후면 5000만+1200만+1000만 / 전면 1200만",battery:"4900mAh",network:"5G"},
+  "갤럭시 S26":{display:"6.3인치 Dynamic AMOLED 2X, FHD+, 120Hz",processor:"Snapdragon 8 Elite Gen 5",camera:"후면 5000만+1200만+1000만 / 전면 1200만",battery:"4300mAh",network:"5G"},
+  "갤럭시 S25 Ultra":{display:"6.9인치 Dynamic AMOLED 2X, QHD+, 120Hz",processor:"Snapdragon 8 Elite",camera:"후면 2억+5000만+1000만+5000만 / 전면 1200만",battery:"5000mAh",network:"5G"},
+  "갤럭시 S25+":{display:"6.7인치 Dynamic AMOLED 2X, QHD+, 120Hz",processor:"Snapdragon 8 Elite",camera:"후면 5000만+1200만+1000만 / 전면 1200만",battery:"4900mAh",network:"5G"},
+  "갤럭시 S25":{display:"6.2인치 Dynamic AMOLED 2X, FHD+, 120Hz",processor:"Snapdragon 8 Elite",camera:"후면 5000만+1200만+1000만 / 전면 1200만",battery:"4000mAh",network:"5G"},
+  "갤럭시 S25 FE":{display:"6.7인치 Dynamic AMOLED 2X, FHD+, 120Hz",processor:"Exynos 2400e",camera:"후면 5000만+1200만+800만 / 전면 1000만",battery:"4700mAh",network:"5G"},
+  "갤럭시 S25 엣지":{display:"6.7인치 Dynamic AMOLED 2X, FHD+, 120Hz",processor:"Snapdragon 8 Elite",camera:"후면 2억+1200만+5000만 / 전면 1200만",battery:"3900mAh",network:"5G"},
+  "갤럭시 Z Fold7":{display:"내부 8.0\" / 외부 6.5\" Dynamic AMOLED 2X, 120Hz",processor:"Snapdragon 8 Elite",camera:"후면 2억+1200만+1000만 / 전면 1000만",battery:"4400mAh",network:"5G"},
+  "갤럭시 Z Flip7":{display:"내부 6.9\" / 외부 4.1\" Super AMOLED, 120Hz",processor:"Exynos 2500",camera:"후면 5000만+1200만 / 전면 1000만",battery:"4300mAh",network:"5G"},
+  "갤럭시 Z Fold6":{display:"내부 7.6\" / 외부 6.3\" Dynamic AMOLED 2X, 120Hz",processor:"Snapdragon 8 Gen 3",camera:"후면 5000만+1200만+1000만 / 전면 1000만",battery:"4400mAh",network:"5G"},
+  "갤럭시 Z Flip6":{display:"내부 6.7\" / 외부 3.4\" Super AMOLED, 120Hz",processor:"Snapdragon 8 Gen 3",camera:"후면 5000만+1200만 / 전면 1000만",battery:"4000mAh",network:"5G"},
+  "갤럭시 Z Flip7 FE":{display:"내부 6.7\" / 외부 3.4\" Super AMOLED, 120Hz",processor:"Snapdragon 7s Gen 3",camera:"후면 5000만+1200만 / 전면 1000만",battery:"4000mAh",network:"5G"},
+  "갤럭시 A36":{display:"6.7인치 Super AMOLED, FHD+, 120Hz",processor:"Snapdragon 6 Gen 3",camera:"후면 5000만+800만+500만 / 전면 1200만",battery:"5000mAh",network:"5G"},
+  "갤럭시 A17":{display:"6.7인치 Super AMOLED, FHD+, 90Hz",processor:"Exynos 1330",camera:"후면 5000만+500만+200만 / 전면 1300만",battery:"5000mAh",network:"5G"},
+  "갤럭시 Jump4":{display:"6.7인치 Super AMOLED, FHD+, 120Hz",processor:"Exynos 1380",camera:"후면 1200만+800만+200만 / 전면 1300만",battery:"5000mAh",network:"5G"},
+  // === Apple 스마트폰 ===
+  "iPhone 17 Pro Max":{display:"6.9인치 Super Retina XDR OLED, 120Hz",processor:"A19 Pro",camera:"후면 4800만+4800만+4800만 / 전면 1800만",battery:"4823mAh",network:"5G"},
+  "iPhone 17 Pro":{display:"6.5인치 Super Retina XDR OLED, 120Hz",processor:"A19 Pro",camera:"후면 4800만+4800만+4800만 / 전면 1800만",battery:"3998mAh",network:"5G"},
+  "iPhone 17":{display:"6.3인치 Super Retina XDR OLED, 120Hz",processor:"A19",camera:"후면 4800만+4800만 / 전면 1800만",battery:"3692mAh",network:"5G"},
+  "iPhone 17e":{display:"6.1인치 Super Retina XDR OLED",processor:"A19",camera:"후면 4800만 / 전면 1200만",battery:"4005mAh",network:"5G"},
+  "iPhone Air":{display:"6.6인치 Super Retina XDR OLED, 120Hz",processor:"A19",camera:"후면 4800만+1200만 / 전면 1200만",battery:"3700mAh",network:"5G"},
+  "iPhone 16 Pro Max":{display:"6.9인치 Super Retina XDR OLED, 120Hz",processor:"A18 Pro",camera:"후면 4800만+4800만+1200만 / 전면 1200만",battery:"4685mAh",network:"5G"},
+  "iPhone 16 Pro":{display:"6.3인치 Super Retina XDR OLED, 120Hz",processor:"A18 Pro",camera:"후면 4800만+4800만+1200만 / 전면 1200만",battery:"3582mAh",network:"5G"},
+  "iPhone 16 Plus":{display:"6.7인치 Super Retina XDR OLED",processor:"A18",camera:"후면 4800만+1200만 / 전면 1200만",battery:"4674mAh",network:"5G"},
+  "iPhone 16":{display:"6.1인치 Super Retina XDR OLED",processor:"A18",camera:"후면 4800만+1200만 / 전면 1200만",battery:"3561mAh",network:"5G"},
+  "iPhone 16e":{display:"6.1인치 Super Retina XDR OLED",processor:"A18",camera:"후면 4800만 / 전면 1200만",battery:"4005mAh",network:"5G"},
+  "iPhone 15 Pro Max":{display:"6.7인치 Super Retina XDR OLED, 120Hz",processor:"A17 Pro",camera:"후면 4800만+1200만+1200만 / 전면 1200만",battery:"4441mAh",network:"5G"},
+  "iPhone 15 Pro":{display:"6.1인치 Super Retina XDR OLED, 120Hz",processor:"A17 Pro",camera:"후면 4800만+1200만+1200만 / 전면 1200만",battery:"3274mAh",network:"5G"},
+  "iPhone 15 Plus":{display:"6.7인치 Super Retina XDR OLED",processor:"A16",camera:"후면 4800만+1200만 / 전면 1200만",battery:"4383mAh",network:"5G"},
+  "iPhone 15":{display:"6.1인치 Super Retina XDR OLED",processor:"A16",camera:"후면 4800만+1200만 / 전면 1200만",battery:"3349mAh",network:"5G"},
+  "iPhone 13":{display:"6.1인치 Super Retina XDR OLED",processor:"A15",camera:"후면 1200만+1200만 / 전면 1200만",battery:"3227mAh",network:"5G"},
+  // === Samsung 태블릿 ===
+  "갤럭시 탭 S11 Ultra":{display:"14.6인치 Dynamic AMOLED 2X, 120Hz",processor:"MediaTek Dimensity 9400+",camera:"후면 1300만+800만 / 전면 1200만",battery:"11600mAh",network:"5G"},
+  "갤럭시 탭 S11":{display:"11인치 Dynamic AMOLED 2X, 120Hz",processor:"MediaTek Dimensity 9400+",camera:"후면 1300만+800만 / 전면 1200만",battery:"8400mAh",network:"5G"},
+  "갤럭시 탭 S10+":{display:"12.4인치 Dynamic AMOLED 2X, 120Hz",processor:"MediaTek Dimensity 9300+",camera:"후면 1300만+800만 / 전면 1200만",battery:"10090mAh",network:"5G"},
+  "갤럭시 탭 S10 Ultra":{display:"14.6인치 Dynamic AMOLED 2X, 120Hz",processor:"MediaTek Dimensity 9300+",camera:"후면 1300만+800만 / 전면 1200만+1200만",battery:"11200mAh",network:"5G"},
+  "갤럭시 탭 S10 FE":{display:"10.9인치 IPS LCD, 90Hz",processor:"Exynos 1580",camera:"후면 1300만 / 전면 1200만",battery:"8000mAh",network:"5G"},
+  "갤럭시 탭 S10 FE+":{display:"13.1인치 IPS LCD, 90Hz",processor:"Exynos 1580",camera:"후면 1300만 / 전면 1200만",battery:"10090mAh",network:"5G"},
+  "갤럭시 탭 S10 Lite":{display:"10.9인치 TFT LCD, 90Hz",processor:"Exynos 1380",camera:"후면 800만 / 전면 500만",battery:"8000mAh",network:"5G"},
+  "갤럭시 탭 A11+":{display:"11인치 TFT LCD, 90Hz",processor:"MediaTek Dimensity 7300",camera:"후면 800만 / 전면 500만",battery:"7040mAh",network:"5G"},
+  "갤럭시 탭 A11":{display:"8.7인치 TFT LCD, 90Hz",processor:"MediaTek Helio G99",camera:"후면 800만 / 전면 500만",battery:"5100mAh",network:"LTE"},
+  "갤럭시 탭 Active5":{display:"8.0인치 TFT LCD, 120Hz",processor:"Exynos 1380",camera:"후면 1300만 / 전면 500만",battery:"5050mAh",network:"5G"},
+  "갤럭시 탭 Active5 Pro":{display:"10.1인치 TFT LCD, 120Hz",processor:"Snapdragon 7s Gen 3",camera:"후면 1200만 / 전면 800만",battery:"10100mAh",network:"5G"},
+  "갤럭시 탭 Active5 Pro EE":{display:"10.1인치 TFT LCD, 120Hz",processor:"Snapdragon 7s Gen 3",camera:"후면 1200만 / 전면 800만",battery:"10100mAh",network:"5G"},
+  "갤럭시 탭 Active4 Pro":{display:"10.1인치 TFT LCD",processor:"Snapdragon 778G",camera:"후면 1300만 / 전면 800만",battery:"7600mAh",network:"5G"},
+  // === Apple 태블릿 ===
+  "iPad Pro 13\" M5":{display:"13인치 Ultra Retina XDR (Tandem OLED), 120Hz",processor:"Apple M5",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"38.99Wh",network:"5G"},
+  "iPad Pro 11\" M5":{display:"11인치 Ultra Retina XDR (Tandem OLED), 120Hz",processor:"Apple M5",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"31.29Wh",network:"5G"},
+  "iPad Pro 11\" M5 NanoTexture":{display:"11인치 Ultra Retina XDR NanoTexture, 120Hz",processor:"Apple M5",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"31.29Wh",network:"5G"},
+  "iPad Pro 13\" M5 NanoTexture":{display:"13인치 Ultra Retina XDR NanoTexture, 120Hz",processor:"Apple M5",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"38.99Wh",network:"5G"},
+  "iPad Pro 13\" M4":{display:"13인치 Ultra Retina XDR (Tandem OLED), 120Hz",processor:"Apple M4",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"38.99Wh",network:"5G"},
+  "iPad Pro 11\" M4":{display:"11인치 Ultra Retina XDR (Tandem OLED), 120Hz",processor:"Apple M4",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"31.29Wh",network:"5G"},
+  "iPad Pro 11\" M4 NanoTexture":{display:"11인치 Ultra Retina XDR NanoTexture, 120Hz",processor:"Apple M4",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"31.29Wh",network:"5G"},
+  "iPad Pro 13\" M4 NanoTexture":{display:"13인치 Ultra Retina XDR NanoTexture, 120Hz",processor:"Apple M4",camera:"후면 1200만 Wide + LiDAR / 전면 1200만 TrueDepth",battery:"38.99Wh",network:"5G"},
+  "iPad Air 13\" M4":{display:"13인치 Liquid Retina (IPS LCD)",processor:"Apple M4",camera:"후면 1200만 Wide / 전면 1200만",battery:"36.59Wh",network:"5G"},
+  "iPad Air 11\" M4":{display:"11인치 Liquid Retina (IPS LCD)",processor:"Apple M4",camera:"후면 1200만 Wide / 전면 1200만",battery:"28.93Wh",network:"5G"},
+  "iPad Air 13\" M3":{display:"13인치 Liquid Retina (IPS LCD)",processor:"Apple M3",camera:"후면 1200만 Wide / 전면 1200만",battery:"36.59Wh",network:"5G"},
+  "iPad Air 11\" M3":{display:"11인치 Liquid Retina (IPS LCD)",processor:"Apple M3",camera:"후면 1200만 Wide / 전면 1200만",battery:"28.93Wh",network:"5G"},
+  "iPad Air 13\" M2":{display:"13인치 Liquid Retina (IPS LCD)",processor:"Apple M2",camera:"후면 1200만 Wide / 전면 1200만",battery:"36.59Wh",network:"5G"},
+  "iPad Air 11\" M2":{display:"11인치 Liquid Retina (IPS LCD)",processor:"Apple M2",camera:"후면 1200만 Wide / 전면 1200만",battery:"28.93Wh",network:"5G"},
+  "iPad mini A17 Pro":{display:"8.3인치 Liquid Retina (IPS LCD)",processor:"Apple A17 Pro",camera:"후면 1200만 Wide / 전면 1200만",battery:"19.3Wh",network:"5G"},
+  "iPad A16":{display:"11인치 Liquid Retina (IPS LCD)",processor:"Apple A16",camera:"후면 1200만 Wide / 전면 1200만",battery:"28.93Wh",network:"5G"}
+};
+
+// ===== CONSTANTS =====
+const INTEREST_RATE = 0.059;
+const INSTALLMENT_MONTHS = 24;
+
+// ===== UTILITY =====
+function fmt(n) { return n.toLocaleString('ko-KR'); }
+
+function getDeviceName(code) {
+  return PHONE_MODEL_MAP[code] || TABLET_DATA[code] || code;
+}
+
+function getPrice(code) {
+  return PHONE_PRICE_MAP[code] || TABLET_PRICE_MAP[code] || 0;
+}
+
+// 모델명에서 스펙 키를 추출 (용량 부분 제거)
+function getSpecKey(deviceName) {
+  // 정확한 매칭 먼저 시도
+  if (SPEC_DATA[deviceName]) return deviceName;
+  // 용량/특수판 제거하고 매칭
+  const cleaned = deviceName
+    .replace(/\s*\d+GB$/,'').replace(/\s*\d+TB$/,'')
+    .replace(/\s*5G$/,'').replace(/\s*128GB$/,'')
+    .replace(/\s*크록스.*$/,'').replace(/\s*에디션.*$/,'')
+    .trim();
+  if (SPEC_DATA[cleaned]) return cleaned;
+  // 부분 매칭
+  for (const key of Object.keys(SPEC_DATA)) {
+    if (cleaned.startsWith(key) || deviceName.startsWith(key)) return key;
+  }
+  return null;
+}
+
+function getStorageFromName(name) {
+  const m = name.match(/(\d+(?:\.\d+)?(?:GB|TB))/i);
+  return m ? m[1] : '-';
+}
+
+// ===== POPULATE =====
+function populateModels() {
+  const sel = document.getElementById('modelSelect');
+  const type = document.getElementById('deviceType').value;
+  sel.innerHTML = '<option value="">단말을 선택하세요</option>';
+
+  if (type === 'phone') {
+    // 브랜드별 그룹
+    const groups = {Samsung:[],Apple:[],Others:[]};
+    const seen = new Set();
+    for (const [code, name] of Object.entries(PHONE_MODEL_MAP)) {
+      if (seen.has(name)) continue;
+      seen.add(name);
+      const price = PHONE_PRICE_MAP[code];
+      if (!price) continue;
+      if (name.startsWith('갤럭시') || name.startsWith('맘편안')) groups.Samsung.push({code,name,price});
+      else if (name.startsWith('iPhone')) groups.Apple.push({code,name,price});
+      else groups.Others.push({code,name,price});
+    }
+    for (const [label, items] of [['Samsung',groups.Samsung],['Apple',groups.Apple],['기타',groups.Others]]) {
+      if (!items.length) continue;
+      const og = document.createElement('optgroup');
+      og.label = label;
+      items.sort((a,b) => b.price - a.price);
+      items.forEach(({code,name,price}) => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = `${name} (${fmt(price)}원)`;
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    }
+  } else {
+    const groups = {Samsung:[],Apple:[]};
+    for (const [code, name] of Object.entries(TABLET_DATA)) {
+      const price = TABLET_PRICE_MAP[code];
+      if (!price) continue;
+      if (name.startsWith('갤럭시') || name.startsWith('Galaxy')) groups.Samsung.push({code,name,price});
+      else groups.Apple.push({code,name,price});
+    }
+    for (const [label, items] of [['Samsung',groups.Samsung],['Apple',groups.Apple]]) {
+      if (!items.length) continue;
+      const og = document.createElement('optgroup');
+      og.label = label;
+      items.sort((a,b) => b.price - a.price);
+      items.forEach(({code,name,price}) => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = `${name} (${fmt(price)}원)`;
+        og.appendChild(opt);
+      });
+      sel.appendChild(og);
+    }
+  }
+}
+
+function populatePlans() {
+  const sel = document.getElementById('planSelect');
+  const deviceType = document.getElementById('deviceType').value;
+  sel.innerHTML = '<option value="">요금제를 선택하세요</option>';
+
+  const planType = deviceType === 'tablet' ? 'tablet' : 'phone';
+  const primary = [], secondary = [];
+
+  for (const [name, info] of Object.entries(PLAN_DATA)) {
+    if (info.type === planType) primary.push({name, fee: info.fee});
+    else secondary.push({name, fee: info.fee});
+  }
+
+  primary.sort((a,b) => b.fee - a.fee);
+  secondary.sort((a,b) => b.fee - a.fee);
+
+  const ogPrimary = document.createElement('optgroup');
+  ogPrimary.label = planType === 'tablet' ? '스마트기기 요금제' : '휴대폰 요금제';
+  primary.forEach(({name, fee}) => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = `${name} (${fmt(fee)}원)`;
+    ogPrimary.appendChild(opt);
+  });
+  sel.appendChild(ogPrimary);
+
+  if (secondary.length) {
+    const ogSec = document.createElement('optgroup');
+    ogSec.label = planType === 'tablet' ? '휴대폰 요금제' : '스마트기기 요금제';
+    secondary.forEach(({name, fee}) => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = `${name} (${fmt(fee)}원)`;
+      ogSec.appendChild(opt);
+    });
+    sel.appendChild(ogSec);
+  }
+}
+
+// ===== CALCULATE =====
+function calculate() {
+  const modelCode = document.getElementById('modelSelect').value;
+  const planName = document.getElementById('planSelect').value;
+  const ktSubsidy = parseInt(document.getElementById('ktSubsidy').value) || 0;
+  const applyFeeDiscount = document.getElementById('feeDiscount').checked;
+
+  if (!modelCode || !planName) return;
+
+  const deviceName = getDeviceName(modelCode);
+  const retailPrice = getPrice(modelCode);
+  const planFee = PLAN_DATA[planName]?.fee || 0;
+
+  // 할부원금 = 출고가 - KT지원금
+  const installmentBase = Math.max(0, retailPrice - ktSubsidy);
+
+  // 월할부금 (원리금균등상환)
+  const r = INTEREST_RATE / 12;
+  const n = INSTALLMENT_MONTHS;
+  let monthlyInstallment = 0;
+  if (installmentBase > 0) {
+    monthlyInstallment = Math.round(installmentBase * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1));
+  }
+
+  // 요금 계산
+  const planDiscount = applyFeeDiscount ? Math.round(planFee * 0.25) : 0;
+  const planFinal = planFee - planDiscount;
+
+  // 총액
+  const grandTotal = monthlyInstallment + planFinal;
+
+  // 스펙
+  const specKey = getSpecKey(deviceName);
+  const spec = specKey ? SPEC_DATA[specKey] : null;
+  const storage = getStorageFromName(deviceName);
+
+  // === UI 업데이트 ===
+  updateEl('grandTotal', fmt(grandTotal) + '원');
+  updateEl('breakdownPhone', fmt(monthlyInstallment) + '원');
+  updateEl('breakdownPlan', fmt(planFinal) + '원');
+
+  updateEl('deviceName', deviceName);
+  updateEl('retailPrice', fmt(retailPrice) + '원');
+  updateEl('subsidyDisplay', ktSubsidy > 0 ? '- ' + fmt(ktSubsidy) + '원' : '0원');
+  updateEl('installmentBase', fmt(installmentBase) + '원');
+
+  updateEl('specDisplay', spec?.display || '-');
+  updateEl('specProcessor', spec?.processor || '-');
+  updateEl('specStorage', storage);
+  updateEl('specCamera', spec?.camera || '-');
+  updateEl('specBattery', spec?.battery || '-');
+  updateEl('specNetwork', spec?.network || '-');
+
+  updateEl('monthlyInstallment', fmt(monthlyInstallment) + '원');
+
+  updateEl('planName', planName);
+  updateEl('planBaseFee', fmt(planFee) + '원');
+
+  const discountRow = document.getElementById('discountRow');
+  if (applyFeeDiscount && planDiscount > 0) {
+    discountRow.style.display = 'flex';
+    updateEl('planDiscountAmt', '- ' + fmt(planDiscount) + '원');
+  } else {
+    discountRow.style.display = 'none';
+  }
+  updateEl('planFinalFee', fmt(planFinal) + '원');
+}
+
+function updateEl(id, text) {
+  const el = document.getElementById(id);
+  if (el && el.textContent !== text) {
+    el.textContent = text;
+    el.classList.remove('value-update');
+    void el.offsetWidth;
+    el.classList.add('value-update');
+  }
+}
+
+// ===== PDF 출력 =====
+function generatePrintPage() {
+  const modelCode = document.getElementById('modelSelect').value;
+  const planName = document.getElementById('planSelect').value;
+  if (!modelCode || !planName) { alert('단말과 요금제를 선택해주세요.'); return; }
+
+  const openType = document.getElementById('openType').value;
+  const applyFeeDiscount = document.getElementById('feeDiscount').checked;
+  const discountType = applyFeeDiscount ? '요금할인' : '공시할인';
+  const deviceName = getDeviceName(modelCode);
+  const retailPrice = getPrice(modelCode);
+  const ktSubsidy = parseInt(document.getElementById('ktSubsidy').value) || 0;
+  const planFee = PLAN_DATA[planName]?.fee || 0;
+
+  const installmentBase = Math.max(0, retailPrice - ktSubsidy);
+  const r = INTEREST_RATE / 12;
+  const n = INSTALLMENT_MONTHS;
+  let monthlyInstallment = 0;
+  if (installmentBase > 0) {
+    monthlyInstallment = Math.round(installmentBase * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1));
+  }
+  const planDiscount = applyFeeDiscount ? Math.round(planFee * 0.25) : 0;
+  const planFinal = planFee - planDiscount;
+  const grandTotal = monthlyInstallment + planFinal;
+
+  const specKey = getSpecKey(deviceName);
+  const spec = specKey ? SPEC_DATA[specKey] : {};
+  const storage = getStorageFromName(deviceName);
+
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}.`;
+
+  // KT Logo - use local image reference (also works as base64 for print)
+  const logoImg = 'kt_logo.png';
+
+  const printHTML = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>납품 정책 견적서</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
+@media print {
+  @page { size:A4; margin:18mm 16mm 14mm 16mm; }
+  body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
+@media screen {
+  body { max-width:780px; margin:0 auto; padding:40px 48px; }
+}
+
+/* ── Header ── */
+.header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+.header h1 { font-size:24px; font-weight:800; letter-spacing:-0.5px; }
+.header img { width:80px; height:auto; }
+
+/* ── Meta ── */
+.meta-table { border-collapse:collapse; margin-bottom:20px; }
+.meta-table td { padding:3px 0; font-size:12px; vertical-align:top; }
+.meta-table .ml { color:#888; width:58px; font-weight:500; }
+.meta-table .mv { color:#1a1a1a; font-weight:600; padding-left:14px; }
+
+/* ── Section header ── */
+.sec { display:flex; align-items:center; gap:8px; margin:22px 0 10px; }
+.sec-bar { width:3px; height:16px; background:#EC1B23; border-radius:1px; flex-shrink:0; }
+.sec-title { font-size:14px; font-weight:700; color:#1a1a1a; }
+.sec-line { flex:1; height:1px; background:linear-gradient(90deg,#ddd,transparent); }
+
+/* ── Table ── */
+.tbl { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:2px; }
+.tbl td { padding:9px 12px; border:1px solid #e5e5e5; vertical-align:middle; }
+.tbl .lbl { background:#f7f7f7; color:#555; font-weight:500; white-space:nowrap; }
+.tbl .val { color:#1a1a1a; font-weight:600; }
+.tbl .val-r { color:#1a1a1a; font-weight:600; text-align:right; }
+.tbl .val-discount { color:#EC1B23; font-weight:700; text-align:right; }
+.tbl .val-bold { color:#1a1a1a; font-weight:700; text-align:right; }
+
+/* ── 2-column spec grid ── */
+.spec-tbl { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:2px; }
+.spec-tbl td { padding:9px 12px; border:1px solid #e5e5e5; vertical-align:middle; }
+.spec-tbl .lbl { background:#f7f7f7; color:#555; font-weight:500; width:18%; white-space:nowrap; }
+.spec-tbl .val { color:#1a1a1a; font-weight:600; width:32%; }
+
+/* ── Total bar ── */
+.total-box {
+  background:#1e2a3a; color:#fff; border-radius:10px;
+  padding:20px 28px; margin:22px 0 18px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.total-left .total-sub { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:1px; text-transform:uppercase; margin-bottom:2px; }
+.total-left .total-label { font-size:16px; font-weight:700; }
+.total-right { text-align:right; }
+.total-right .total-amount { font-size:34px; font-weight:800; letter-spacing:-1px; }
+.total-right .total-amount .won { font-size:18px; font-weight:600; }
+.total-right .total-detail { font-size:11px; color:rgba(255,255,255,0.55); margin-top:2px; }
+
+/* ── Notes ── */
+.notes-line { border:none; border-top:1px solid #e0e0e0; margin:0 0 12px; }
+.notes { font-size:10px; color:#999; line-height:1.9; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>납품 정책 견적서</h1>
+  <img src="${logoImg}" alt="KT">
+</div>
+
+<!-- Meta -->
+<table class="meta-table">
+  <tr><td class="ml">작성일</td><td class="mv">${dateStr}</td></tr>
+  <tr><td class="ml">개통유형</td><td class="mv">${openType}</td></tr>
+  <tr><td class="ml">할인유형</td><td class="mv">${discountType}</td></tr>
+</table>
+
+<!-- 단말 정보 -->
+<div class="sec"><div class="sec-bar"></div><span class="sec-title">단말 정보</span><div class="sec-line"></div></div>
+<table class="tbl">
+  <tr><td class="lbl" style="width:18%">단말명</td><td class="val" colspan="3">${deviceName}</td></tr>
+  <tr><td class="lbl">출고가</td><td class="val-r" style="width:28%">${fmt(retailPrice)}원</td><td class="lbl" style="width:18%">KT 지원금</td><td class="val-discount" style="width:28%">${ktSubsidy > 0 ? '-'+fmt(ktSubsidy)+'원' : '-'}</td></tr>
+  <tr><td class="lbl">할부원금</td><td class="val-bold" colspan="3">${fmt(installmentBase)}원</td></tr>
+</table>
+
+<!-- 단말 스펙 -->
+<div class="sec"><div class="sec-bar"></div><span class="sec-title">단말 스펙</span><div class="sec-line"></div></div>
+<table class="tbl">
+  <tr><td class="lbl" style="width:18%">디스플레이</td><td class="val" colspan="3">${spec.display||'-'}</td></tr>
+  <tr><td class="lbl">프로세서</td><td class="val" colspan="3">${spec.processor||'-'}</td></tr>
+  <tr><td class="lbl">저장공간</td><td class="val" colspan="3">${storage}</td></tr>
+  <tr><td class="lbl">카메라</td><td class="val" colspan="3">${spec.camera||'-'}</td></tr>
+  <tr><td class="lbl">배터리</td><td class="val" colspan="3">${spec.battery||'-'}</td></tr>
+</table>
+
+<!-- 요금제 -->
+<div class="sec"><div class="sec-bar"></div><span class="sec-title">요금제</span><div class="sec-line"></div></div>
+<table class="tbl">
+  <tr><td class="lbl" style="width:18%">요금제명</td><td class="val" colspan="3">${planName}</td></tr>
+  ${applyFeeDiscount
+    ? `<tr><td class="lbl">기본 요금</td><td class="val" style="width:28%">${fmt(planFee)}원</td><td class="lbl" style="width:18%">선택약정 할인 (25%)</td><td class="val-discount" style="width:28%">-${fmt(planDiscount)}원</td></tr>`
+    : `<tr><td class="lbl">기본 요금</td><td class="val" colspan="3">${fmt(planFee)}원</td></tr>`
+  }
+  <tr><td class="lbl">할인 적용 요금</td><td class="val" colspan="3" style="font-weight:700">${fmt(planFinal)}원</td></tr>
+</table>
+
+<!-- 할부 정보 -->
+<div class="sec"><div class="sec-bar"></div><span class="sec-title">할부 정보</span><div class="sec-line"></div></div>
+<table class="tbl">
+  <tr><td class="lbl" style="width:18%">할부 조건</td><td class="val" style="width:28%">24개월 / 연 5.9%</td><td class="lbl" style="width:18%">월 할부금</td><td class="val-bold" style="width:28%">${fmt(monthlyInstallment)}원</td></tr>
+</table>
+
+<!-- 월 예상 납부금 -->
+<div class="total-box">
+  <div class="total-left">
+    <div class="total-sub">MONTHLY PAYMENT</div>
+    <div class="total-label">월 예상 납부금</div>
+  </div>
+  <div class="total-right">
+    <div class="total-amount">${fmt(grandTotal)}<span class="won">원</span></div>
+    <div class="total-detail">할부금 ${fmt(monthlyInstallment)} + 요금 ${fmt(planFinal)}</div>
+  </div>
+</div>
+
+<!-- Notes -->
+<hr class="notes-line">
+<div class="notes">
+  ※ 본 견적은 참고용이며 실제 개통 시점 및 부가서비스 이용에 따라 달라질 수 있습니다.<br>
+  ※ 약정기간 내 해지 시 할인반환금이 부과될 수 있습니다.<br>
+  ※ USIM 신규 발급 시 7,700원, eSIM은 2,750원이 1회 청구됩니다.
+</div>
+
+<script>window.onload=function(){window.print();}<\/script>
+</body>
+</html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(printHTML);
+  w.document.close();
+}
+
+// ===== INIT =====
+document.getElementById('deviceType').addEventListener('change', () => {
+  populateModels();
+  populatePlans();
+  calculate();
+});
+document.getElementById('openType').addEventListener('change', calculate);
+document.getElementById('modelSelect').addEventListener('change', calculate);
+document.getElementById('planSelect').addEventListener('change', calculate);
+document.getElementById('ktSubsidy').addEventListener('input', calculate);
+document.getElementById('feeDiscount').addEventListener('change', calculate);
+
+populateModels();
+populatePlans();
+</script>
+</body>
+</html>
