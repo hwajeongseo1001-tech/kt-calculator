@@ -159,7 +159,7 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
   flex-shrink: 0;
 }
 
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
 .toggle-slider {
   position: absolute;
   inset: 0;
@@ -940,8 +940,8 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 <div class="sec"><div class="sec-bar"></div><span class="sec-title">단말 정보</span><div class="sec-line"></div></div>
 <table class="tbl">
   <tr><td class="lbl" style="width:18%">단말명</td><td class="val" colspan="3">${deviceName}</td></tr>
-  <tr><td class="lbl">출고가</td><td class="val-r" style="width:28%">${fmt(retailPrice)}원</td><td class="lbl" style="width:18%">KT 지원금</td><td class="val-discount" style="width:28%">${ktSubsidy > 0 ? '-'+fmt(ktSubsidy)+'원' : '-'}</td></tr>
-  <tr><td class="lbl">할부원금</td><td class="val-bold" colspan="3">${fmt(installmentBase)}원</td></tr>
+  <tr><td class="lbl">출고가</td><td class="val" style="width:28%">${fmt(retailPrice)}원</td><td class="lbl" style="width:18%">KT 지원금</td><td class="val" style="width:28%;color:#EC1B23;font-weight:700">${ktSubsidy > 0 ? '-'+fmt(ktSubsidy)+'원' : '-'}</td></tr>
+  <tr><td class="lbl">할부원금</td><td class="val" colspan="3" style="font-weight:700">${fmt(installmentBase)}원</td></tr>
 </table>
 
 <!-- 단말 스펙 -->
