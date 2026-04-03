@@ -106,7 +106,8 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
 }
 
 .form-group select,
-.form-group input[type="number"] {
+.form-group input[type="number"],
+.form-group input[type="text"] {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid var(--border-default);
@@ -373,6 +374,30 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
     </div>
 
     <button class="btn-pdf" onclick="generatePrintPage()">PDF 견적서 출력</button>
+
+    <h2 style="margin-top:28px;">견적 대상</h2>
+    <div class="form-group">
+      <label for="clientName">고객사명</label>
+      <input type="text" id="clientName">
+    </div>
+
+    <h2 style="margin-top:28px;">영업 직원 정보</h2>
+    <div class="form-group">
+      <label for="staffName">이름 / 직함</label>
+      <input type="text" id="staffName">
+    </div>
+    <div class="form-group">
+      <label for="staffDept">소속</label>
+      <input type="text" id="staffDept">
+    </div>
+    <div class="form-group">
+      <label for="staffPhone">전화번호</label>
+      <input type="text" id="staffPhone">
+    </div>
+    <div class="form-group">
+      <label for="staffEmail">이메일</label>
+      <input type="text" id="staffEmail">
+    </div>
   </div>
 
   <!-- RIGHT: RESULTS -->
@@ -848,6 +873,12 @@ function generatePrintPage() {
   const spec = specKey ? SPEC_DATA[specKey] : {};
   const storage = getStorageFromName(deviceName);
 
+  const clientName = document.getElementById('clientName').value.trim();
+  const staffName = document.getElementById('staffName').value.trim();
+  const staffDept = document.getElementById('staffDept').value.trim();
+  const staffPhone = document.getElementById('staffPhone').value.trim();
+  const staffEmail = document.getElementById('staffEmail').value.trim();
+
   const today = new Date();
   const dateStr = `${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}.`;
 
@@ -864,7 +895,7 @@ function generatePrintPage() {
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 @media print {
-  @page { size:A4; margin:18mm 16mm 14mm 16mm; }
+  @page { size:A4; margin:14mm 14mm 10mm 14mm; }
   body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }
 @media screen {
@@ -872,9 +903,22 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 }
 
 /* ── Header ── */
-.header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+.header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
 .header h1 { font-size:24px; font-weight:800; letter-spacing:-0.5px; }
 .header img { width:80px; height:auto; }
+
+/* ── Client ── */
+.client-box { padding-bottom:6px; border-bottom:1px solid #1a1a1a; margin-bottom:8px; margin-top:-6px; }
+.client-box span { font-size:13px; font-weight:600; color:#1a1a1a; }
+.client-box .honorific { font-size:13px; font-weight:600; color:#1a1a1a; margin-left:8px; }
+
+/* ── Staff info ── */
+.staff-info { text-align:left; font-size:12px; line-height:1.8; color:#1a1a1a; }
+.staff-title { padding:0; margin-bottom:2px; }
+.staff-title .staff-name { font-size:13px; font-weight:700; color:#1a1a1a; }
+.staff-title .staff-dept { font-size:11.5px; font-weight:500; color:#888; }
+.staff-info .staff-contact { color:#1a1a1a; font-weight:600; display:flex; align-items:center; gap:6px; }
+.staff-info .staff-contact .cl { display:inline-block; width:20px; text-align:center; font-size:10px; font-weight:700; color:#fff; background:#EC1B23; border-radius:3px; padding:0; line-height:18px; flex-shrink:0; }
 
 /* ── Meta ── */
 .meta-table { border-collapse:collapse; margin-bottom:20px; }
@@ -883,7 +927,7 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 .meta-table .mv { color:#1a1a1a; font-weight:600; padding-left:14px; }
 
 /* ── Section header ── */
-.sec { display:flex; align-items:center; gap:8px; margin:22px 0 10px; }
+.sec { display:flex; align-items:center; gap:8px; margin:16px 0 8px; }
 .sec-bar { width:3px; height:16px; background:#EC1B23; border-radius:1px; flex-shrink:0; }
 .sec-title { font-size:14px; font-weight:700; color:#1a1a1a; }
 .sec-line { flex:1; height:1px; background:linear-gradient(90deg,#ddd,transparent); }
@@ -894,7 +938,7 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 .tbl .lbl { background:#f7f7f7; color:#555; font-weight:500; white-space:nowrap; }
 .tbl .val { color:#1a1a1a; font-weight:600; }
 .tbl .val-r { color:#1a1a1a; font-weight:600; text-align:right; }
-.tbl .val-discount { color:#EC1B23; font-weight:700; text-align:right; }
+.tbl .val-discount { color:#EC1B23; font-weight:700; }
 .tbl .val-bold { color:#1a1a1a; font-weight:700; text-align:right; }
 
 /* ── 2-column spec grid ── */
@@ -906,7 +950,7 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 /* ── Total bar ── */
 .total-box {
   background:#1e2a3a; color:#fff; border-radius:10px;
-  padding:20px 28px; margin:22px 0 18px;
+  padding:18px 28px; margin:16px 0 14px;
   display:flex; justify-content:space-between; align-items:center;
 }
 .total-left .total-sub { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:1px; text-transform:uppercase; margin-bottom:2px; }
@@ -917,7 +961,7 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
 .total-right .total-detail { font-size:11px; color:rgba(255,255,255,0.55); margin-top:2px; }
 
 /* ── Notes ── */
-.notes-line { border:none; border-top:1px solid #e0e0e0; margin:0 0 12px; }
+.notes-line { border:none; border-top:1px solid #e0e0e0; margin:0 0 8px; }
 .notes { font-size:10px; color:#999; line-height:1.9; }
 </style>
 </head>
@@ -929,12 +973,27 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
   <img src="${logoImg}" alt="KT">
 </div>
 
-<!-- Meta -->
-<table class="meta-table">
-  <tr><td class="ml">작성일</td><td class="mv">${dateStr}</td></tr>
-  <tr><td class="ml">개통유형</td><td class="mv">${openType}</td></tr>
-  <tr><td class="ml">할인유형</td><td class="mv">${discountType}</td></tr>
-</table>
+<!-- Meta + Staff -->
+<div style="display:flex; justify-content:space-between; align-items:stretch; margin-bottom:20px;">
+  <div style="display:flex; flex-direction:column;">
+    ${clientName ? `<div class="client-box"><span>${clientName}</span><span class="honorific">귀중</span></div>` : ''}
+    <table class="meta-table" style="margin-top:auto; margin-bottom:0;">
+      <tr><td class="ml">작성일</td><td class="mv">${dateStr}</td></tr>
+      <tr><td class="ml">개통유형</td><td class="mv">${openType}</td></tr>
+      <tr><td class="ml">할인유형</td><td class="mv">${discountType}</td></tr>
+    </table>
+  </div>
+  ${staffName ? `<div class="staff-info" style="display:flex; flex-direction:column;">
+    <div class="staff-title">
+      <div class="staff-name">${staffName}</div>
+      ${staffDept ? `<div class="staff-dept">${staffDept}</div>` : ''}
+    </div>
+    <div style="margin-top:auto;">
+      ${staffPhone ? `<div class="staff-contact"><span class="cl">M</span>${staffPhone}</div>` : ''}
+      ${staffEmail ? `<div class="staff-contact"><span class="cl">E</span>${staffEmail}</div>` : ''}
+    </div>
+  </div>` : ''}
+</div>
 
 <!-- 단말 정보 -->
 <div class="sec"><div class="sec-bar"></div><span class="sec-title">단말 정보</span><div class="sec-line"></div></div>
