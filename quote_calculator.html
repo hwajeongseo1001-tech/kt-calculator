@@ -135,6 +135,57 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
   box-shadow: 0 0 0 3px var(--border-focus);
 }
 
+#modelSearch {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23b9b9b9' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+.search-dropdown {
+  display: none;
+  position: absolute;
+  left: 0; right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 100;
+  margin-top: 2px;
+}
+.search-dropdown.open { display: block; }
+.search-dropdown .dd-group {
+  padding: 6px 12px 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.search-dropdown .dd-item {
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.search-dropdown .dd-item:hover { background: var(--accent-teal-dim); }
+.selected-device {
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: var(--accent-teal-dim);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-teal);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+}
+.selected-device.active { display: flex; }
+.selected-device .clear-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 16px; color: var(--text-muted); padding: 0 0 0 8px;
+}
 .form-group input[type="number"] { font-variant-numeric: tabular-nums; }
 .input-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
@@ -345,11 +396,14 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="modelSelect">단말 선택</label>
-      <select id="modelSelect">
+    <div class="form-group" style="position:relative;">
+      <label>단말 선택</label>
+      <input type="text" id="modelSearch" placeholder="단말명 검색" autocomplete="off">
+      <div id="modelDropdown" class="search-dropdown"></div>
+      <select id="modelSelect" style="display:none;">
         <option value="">단말을 선택하세요</option>
       </select>
+      <div id="modelSelected" class="selected-device"></div>
     </div>
 
     <div class="form-group">
@@ -1058,6 +1112,74 @@ body { font-family:'Pretendard Variable',sans-serif; color:#1a1a1a; }
   w.document.write(printHTML);
   w.document.close();
 }
+
+// ===== 단말 검색 드롭다운 =====
+function buildDropdown(keyword) {
+  const dd = document.getElementById('modelDropdown');
+  const sel = document.getElementById('modelSelect');
+  const groups = sel.querySelectorAll('optgroup');
+  dd.innerHTML = '';
+  let count = 0;
+
+  groups.forEach(group => {
+    const items = [...group.querySelectorAll('option')].filter(opt =>
+      !keyword || opt.textContent.toLowerCase().includes(keyword.toLowerCase())
+    );
+    if (!items.length) return;
+    const gl = document.createElement('div');
+    gl.className = 'dd-group';
+    gl.textContent = group.label;
+    dd.appendChild(gl);
+    items.forEach(opt => {
+      const item = document.createElement('div');
+      item.className = 'dd-item';
+      item.textContent = opt.textContent;
+      item.dataset.value = opt.value;
+      item.addEventListener('click', () => selectModel(opt.value, opt.textContent));
+      dd.appendChild(item);
+      count++;
+    });
+  });
+
+  dd.classList.toggle('open', count > 0);
+}
+
+function selectModel(value, text) {
+  const sel = document.getElementById('modelSelect');
+  sel.value = value;
+  sel.dispatchEvent(new Event('change'));
+  document.getElementById('modelSearch').value = '';
+  document.getElementById('modelDropdown').classList.remove('open');
+  const disp = document.getElementById('modelSelected');
+  disp.innerHTML = `<span>${text}</span><button class="clear-btn" onclick="clearModel()">&times;</button>`;
+  disp.classList.add('active');
+}
+
+function clearModel() {
+  document.getElementById('modelSelect').value = '';
+  document.getElementById('modelSelect').dispatchEvent(new Event('change'));
+  document.getElementById('modelSelected').classList.remove('active');
+  document.getElementById('modelSearch').focus();
+}
+
+document.getElementById('modelSearch').addEventListener('focus', function() {
+  buildDropdown(this.value.trim());
+});
+document.getElementById('modelSearch').addEventListener('input', function() {
+  buildDropdown(this.value.trim());
+});
+document.addEventListener('click', function(e) {
+  const wrap = document.querySelector('#modelSearch').parentElement;
+  if (!wrap.contains(e.target)) {
+    document.getElementById('modelDropdown').classList.remove('open');
+  }
+});
+
+// deviceType 변경 시 초기화
+document.getElementById('deviceType').addEventListener('change', () => {
+  document.getElementById('modelSearch').value = '';
+  document.getElementById('modelSelected').classList.remove('active');
+});
 
 // ===== INIT =====
 document.getElementById('deviceType').addEventListener('change', () => {
