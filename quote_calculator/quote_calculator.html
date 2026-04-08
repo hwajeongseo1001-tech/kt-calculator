@@ -169,23 +169,6 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
   transition: background 0.1s;
 }
 .search-dropdown .dd-item:hover { background: var(--accent-teal-dim); }
-.selected-device {
-  margin-top: 6px;
-  padding: 8px 12px;
-  background: var(--accent-teal-dim);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent-teal);
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-}
-.selected-device.active { display: flex; }
-.selected-device .clear-btn {
-  background: none; border: none; cursor: pointer;
-  font-size: 16px; color: var(--text-muted); padding: 0 0 0 8px;
-}
 .form-group input[type="number"] { font-variant-numeric: tabular-nums; }
 .input-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
@@ -209,6 +192,28 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
   width: 44px;
   height: 24px;
   flex-shrink: 0;
+}
+
+.discount-toggle { display: flex; gap: 8px; }
+.dt-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.dt-btn:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+.dt-btn.active {
+  background: #fff;
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .toggle-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
@@ -400,10 +405,9 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
       <label>단말 선택</label>
       <input type="text" id="modelSearch" placeholder="단말명 검색" autocomplete="off">
       <div id="modelDropdown" class="search-dropdown"></div>
-      <select id="modelSelect" style="display:none;">
+      <select id="modelSelect">
         <option value="">단말을 선택하세요</option>
       </select>
-      <div id="modelSelected" class="selected-device"></div>
     </div>
 
     <div class="form-group">
@@ -414,17 +418,18 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
     </div>
 
     <div class="form-group">
-      <label for="ktSubsidy">KT 지원금 (원)</label>
-      <input type="number" id="ktSubsidy" value="0" min="0" step="10000" placeholder="수기 입력">
-      <div class="input-hint">KT 지원금을 직접 입력하세요</div>
+      <label>할인유형</label>
+      <div class="discount-toggle">
+        <button type="button" class="dt-btn active" data-value="공시할인">공시할인</button>
+        <button type="button" class="dt-btn" data-value="요금할인">요금할인 (25%)</button>
+      </div>
+      <input type="hidden" id="discountType" value="공시할인">
     </div>
 
-    <div class="toggle-row">
-      <div class="toggle-switch">
-        <input type="checkbox" id="feeDiscount">
-        <span class="toggle-slider"></span>
-      </div>
-      <label for="feeDiscount">선택약정할인 적용 (요금 25% 할인)</label>
+    <div class="form-group" id="subsidyGroup">
+      <label for="ktSubsidy">KT 공통지원금 (원)</label>
+      <input type="number" id="ktSubsidy" value="0" min="0" step="10000">
+      <div class="input-hint" id="subsidyHint">개통유형·단말·요금제 선택 시 자동 조회됩니다</div>
     </div>
 
     <button class="btn-pdf" onclick="generatePrintPage()">PDF 견적서 출력</button>
@@ -546,6 +551,7 @@ body { min-height: 100vh; background: var(--bg-base); overflow-x: hidden; }
 </main>
 
 <script src="quote_data.js"></script>
+<script src="subsidy_data.js"></script>
 <script>
 // ===== DATA (정적) =====
 // PHONE_MODEL_MAP, PHONE_PRICE_MAP, PLAN_DATA → quote_data.js에서 로드 (node quote_update.js로 업데이트)
@@ -820,12 +826,32 @@ function populatePlans() {
   }
 }
 
+// ===== 공통지원금 조회 =====
+function getSubsidy(openType, planName, modelCode) {
+  if (typeof SUBSIDY_DATA === 'undefined') return 0;
+  if (!SUBSIDY_DATA[openType]) return 0;
+  if (!SUBSIDY_DATA[openType][planName]) return 0;
+  return SUBSIDY_DATA[openType][planName][modelCode] || 0;
+}
+
 // ===== CALCULATE =====
 function calculate() {
   const modelCode = document.getElementById('modelSelect').value;
   const planName = document.getElementById('planSelect').value;
-  const ktSubsidy = parseInt(document.getElementById('ktSubsidy').value) || 0;
-  const applyFeeDiscount = document.getElementById('feeDiscount').checked;
+  const discountType = document.getElementById('discountType').value;
+  const applyFeeDiscount = discountType === '요금할인';
+
+  // 공시할인 시 공통지원금 자동 조회
+  if (discountType === '공시할인' && modelCode && planName) {
+    const openType = document.getElementById('openType').value;
+    const autoSubsidy = getSubsidy(openType, planName, modelCode);
+    document.getElementById('ktSubsidy').value = autoSubsidy;
+    document.getElementById('subsidyHint').textContent = autoSubsidy > 0
+      ? '공통지원금 자동 조회됨'
+      : '해당 조합의 공통지원금 데이터 없음';
+  }
+
+  const ktSubsidy = applyFeeDiscount ? 0 : (parseInt(document.getElementById('ktSubsidy').value) || 0);
 
   if (!modelCode || !planName) return;
 
@@ -905,8 +931,8 @@ function generatePrintPage() {
   if (!modelCode || !planName) { alert('단말과 요금제를 선택해주세요.'); return; }
 
   const openType = document.getElementById('openType').value;
-  const applyFeeDiscount = document.getElementById('feeDiscount').checked;
-  const discountType = applyFeeDiscount ? '요금할인' : '공시할인';
+  const discountType = document.getElementById('discountType').value;
+  const applyFeeDiscount = discountType === '요금할인';
   const deviceName = getDeviceName(modelCode);
   const retailPrice = getPrice(modelCode);
   const ktSubsidy = parseInt(document.getElementById('ktSubsidy').value) || 0;
@@ -1150,23 +1176,28 @@ function selectModel(value, text) {
   sel.dispatchEvent(new Event('change'));
   document.getElementById('modelSearch').value = '';
   document.getElementById('modelDropdown').classList.remove('open');
-  const disp = document.getElementById('modelSelected');
-  disp.innerHTML = `<span>${text}</span><button class="clear-btn" onclick="clearModel()">&times;</button>`;
-  disp.classList.add('active');
-}
-
-function clearModel() {
-  document.getElementById('modelSelect').value = '';
-  document.getElementById('modelSelect').dispatchEvent(new Event('change'));
-  document.getElementById('modelSelected').classList.remove('active');
-  document.getElementById('modelSearch').focus();
+  // 필터 초기화 - select의 모든 옵션 다시 보이게
+  sel.querySelectorAll('option').forEach(o => o.style.display = '');
+  sel.querySelectorAll('optgroup').forEach(g => g.style.display = '');
 }
 
 document.getElementById('modelSearch').addEventListener('focus', function() {
   buildDropdown(this.value.trim());
 });
 document.getElementById('modelSearch').addEventListener('input', function() {
-  buildDropdown(this.value.trim());
+  const keyword = this.value.trim().toLowerCase();
+  buildDropdown(keyword);
+  // select 옵션도 동시 필터링
+  const sel = document.getElementById('modelSelect');
+  sel.querySelectorAll('optgroup').forEach(group => {
+    let hasVisible = false;
+    group.querySelectorAll('option').forEach(opt => {
+      const match = !keyword || opt.textContent.toLowerCase().includes(keyword);
+      opt.style.display = match ? '' : 'none';
+      if (match) hasVisible = true;
+    });
+    group.style.display = hasVisible ? '' : 'none';
+  });
 });
 document.addEventListener('click', function(e) {
   const wrap = document.querySelector('#modelSearch').parentElement;
@@ -1178,7 +1209,7 @@ document.addEventListener('click', function(e) {
 // deviceType 변경 시 초기화
 document.getElementById('deviceType').addEventListener('change', () => {
   document.getElementById('modelSearch').value = '';
-  document.getElementById('modelSelected').classList.remove('active');
+  document.getElementById('modelDropdown').classList.remove('open');
 });
 
 // ===== INIT =====
@@ -1191,7 +1222,23 @@ document.getElementById('openType').addEventListener('change', calculate);
 document.getElementById('modelSelect').addEventListener('change', calculate);
 document.getElementById('planSelect').addEventListener('change', calculate);
 document.getElementById('ktSubsidy').addEventListener('input', calculate);
-document.getElementById('feeDiscount').addEventListener('change', calculate);
+document.querySelectorAll('.dt-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.dt-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const input = document.getElementById('discountType');
+    input.value = this.dataset.value;
+    input.dispatchEvent(new Event('change'));
+  });
+});
+document.getElementById('discountType').addEventListener('change', function() {
+  const isPublic = this.value === '공시할인';
+  document.getElementById('subsidyGroup').style.display = isPublic ? '' : 'none';
+  if (!isPublic) {
+    document.getElementById('ktSubsidy').value = 0;
+  }
+  calculate();
+});
 
 populateModels();
 populatePlans();
